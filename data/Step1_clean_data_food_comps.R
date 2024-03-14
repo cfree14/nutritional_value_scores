@@ -33,7 +33,7 @@ data <- data_orig %>%
                           "Oily fish, average of various species consumed in Bangladesh and of different cooking methods"="Oily fish, average of various species consumed and of different cooking methods",
                           "Oily fish, average of various species consumed in Indonesia and of different cooking methods"="Oily fish, average of various species consumed and of different cooking methods")) %>% 
   # Format foods
-  mutate(food=case_when(food_long=="Chayote, average of raw and cooked (boied)" ~ "Green pepper (Chayote)",
+  mutate(food=case_when(food_long=="Chayote, average of raw and cooked (boied)" ~ "Green pepper (chayote)",
                         T ~ food)) %>% 
   # Arrange
   select(country, food_group, dqq_food_group, food, food_long, usda_fdc_id, dqq_question, everything())

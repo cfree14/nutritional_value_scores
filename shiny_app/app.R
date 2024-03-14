@@ -15,11 +15,11 @@ library(RColorBrewer)
 # Directories
 datadir <- "data" # for actual app
 codedir <- "code"  # for actual app
-# datadir <- "shiny_app/data" # when testing
-# codedir <- "shiny_app/code" # when testing
+datadir <- "shiny_app/data" # when testing
+codedir <- "shiny_app/code" # when testing
 
 # Read data
-scores <- readRDS(file.path(datadir, "scores.Rds"))
+scores_orig <- readRDS(file.path(datadir, "scores.Rds"))
 
 # Read scripts
 sapply(list.files(codedir), function(x) source(file.path(codedir, x)))
@@ -27,6 +27,18 @@ sapply(list.files(codedir), function(x) source(file.path(codedir, x)))
 # Countries
 countries <- scores$country %>% unique()
 
+# Format data
+################################################################################
+
+# Food groups
+food_groups <- c("Fruits", "Vegetables", "Legumes, nuts, seeds", "Animal-source foods", "Starchy staples")
+
+# Format data
+scores <- scores_orig %>% 
+  # Format food group
+  mutate(food_group=recode(food_group,
+                           "Pulses, nuts, and seeds"="Legumes, nuts, seeds"),
+         food_group=factor(food_group, levels=food_groups))
 
 
 # User interface
@@ -45,7 +57,8 @@ ui <- fluidPage(
 
 
   # Plot historical comparison
-  plotOutput(outputId = "plot_overall", width=450, height=700)
+  h3("Detailed results"),
+  plotOutput(outputId = "plot_overall", width=650, height=950)
 
 
 )

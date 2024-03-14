@@ -16,6 +16,10 @@ outdir <- "data/processed"
 # Read data
 data_orig <- readxl::read_excel(file.path(indir, "NVS_4Mar2024.xlsx"))
 
+# Read food key
+food_key <- readRDS(file.path(outdir, "food_key.Rds"))
+  
+
 # Format data
 ################################################################################
 
@@ -32,13 +36,17 @@ data <- data_orig %>%
          calorie_density=calorie_density_score,
          nutrient_density=nutrient_density_score,
          overall=nutritional_value_score) %>% 
+  # Recode green pepper (random guess)
+  mutate(food=ifelse(country=="Indonesia" & food=="Green pepper" & overall==48, "Green pepper (chayote)", food)) %>% 
+  # Add food groups
+  left_join(food_key %>% select(food, food_group, dqq_food_group), by="food") %>% 
   # Arrange
-  select(country, food, everything()) %>% 
-  arrange(country, food)
+  select(country, food_group, dqq_food_group, food, everything()) %>% 
+  arrange(country, food_group, dqq_food_group, food)
 
 # Inspect
 str(data)
-
+freeR::complete(data)
 
 # Export data
 ################################################################################
