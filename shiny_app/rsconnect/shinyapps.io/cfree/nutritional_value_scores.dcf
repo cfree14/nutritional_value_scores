@@ -1,0 +1,13 @@
+name: nutritional_value_scores
+title: nutritional_value_scores
+username:
+account: cfree
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11548394
+bundleId: 8397838
+url: https://cfree.shinyapps.io/nutritional_value_scores/
+when: 1710975088.41115
+lastSyncTime: 1710975088.41116
+asMultiple: FALSE
+asStatic: FALSE

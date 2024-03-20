@@ -77,19 +77,18 @@ ui <- fluidPage(
   # Broad results
   h3("Broad results"),
   
+  # Plot boxplot
+  HTML("<b>Figure 2</b>. Distribution of overall nutritional value score and contributing subscores by food group. Food groups are sorted in order of descending median overall nutritional value score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
+  plotOutput(outputId = "plot_boxplot", width=700, height=450),
+  br(),
+  br(),
+  
   # Detailed results
   h3("Detailed results"),
 
   # Plot historical comparison
   HTML("<b>Figure 1</b>. Nutritional value score of foods. Foods are sorted in order of decreasing nutritional value score. Color indicates the broader food group."),
-  plotOutput(outputId = "plot_overall", width=650, height=950),
-  br(),
-  br(),
-  
-  # Plot boxplot
-  HTML("<b>Figure 2</b>. Distribution of overall nutritional value score and contributing subscores by food group. Food groups are sorted in order of descending median overall nutritional value score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
-  plotOutput(outputId = "plot_boxplot", width=700, height=450)
-
+  plotOutput(outputId = "plot_overall", width=650, height=950)
 
 )
 
