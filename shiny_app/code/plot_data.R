@@ -1,29 +1,15 @@
 
-# Plot data
-# country <- "Indonesia"; scores <- data
-plot_overall <- function(data, country){
+# Plot overall
+# country <- "Indonesia"; data <- scores
+plot_overall <- function(data, country, base_theme){
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
 
   # Format data
   country_do <- country
-  sdata <- scores %>% 
+  sdata <- data %>% 
     filter(country==country_do)
-    
-  
-  # Base theme
-  base_theme <- theme(axis.text=element_text(size=12),
-                      axis.title=element_text(size=13),
-                      legend.text=element_text(size=12),
-                      legend.title=element_text(size=13),
-                      # Gridlines
-                      panel.grid.major = element_blank(), 
-                      panel.grid.minor = element_blank(),
-                      panel.background = element_blank(), 
-                      axis.line = element_line(colour = "black"),
-                      # Legend
-                      legend.background = element_rect(fill=alpha('blue', 0)))
   
   # Plot data
   ggplot(sdata, aes(y=reorder(food, overall), x=overall, fill=food_group)) +
@@ -39,12 +25,15 @@ plot_overall <- function(data, country){
 
 }
 
-
-plot_boxplot <- function(data, country){
+# Plot boxplot
+plot_boxplot <- function(data, country, base_theme){
+  
+  # Food groups
+  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
   
   # Format data
   country_do <- country
-  sdata <- scores %>% 
+  sdata <- data %>% 
     filter(country==country_do)
   sdata_long <- sdata %>% 
     gather(key="metric", value="score", 5:ncol(.)) %>% 
@@ -77,8 +66,10 @@ plot_boxplot <- function(data, country){
     geom_boxplot() +
     # Labels
     labs(x="Score", y="") +
+    # Legend
+    scale_fill_manual(values=food_group_colors) +
     # Theme
-    theme_bw() +
+    theme_bw() + base_theme +
     theme(legend.position="none")
   
 }
