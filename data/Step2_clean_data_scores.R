@@ -27,7 +27,7 @@ food_key <- readRDS(file.path(outdir, "food_key.Rds"))
 data <- data_orig %>% 
   # Rename
   janitor::clean_names("snake") %>% 
-  rename(vitmain=vitamin_score,
+  rename(vitamin=vitamin_score,
          mineral=mineral_score,
          eaa=eaa_score,
          omega3=omega_3_fat_score,

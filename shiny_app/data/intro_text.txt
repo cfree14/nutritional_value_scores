@@ -1,0 +1,13 @@
+<p><span style="font-weight: 400;">The Nutritional Value Score (NVS) tool presents a new nutrient profiling system for measuring the nutritional value and healthfulness of foods. The NVS is calculated based on global health priorities&nbsp; and nutrient ratios predictive of noncommunicable disease risk. It can be used to guide consumer choice, food policy, industry formulations, and investments.</span></p>
+<p><span style="font-weight: 400;">The NVS is calculated based on the following seven components:</span></p>
+<ol>
+<li style="font-weight: 400;"><strong>Vitamins: </strong><span style="font-weight: 400;">This score reflects the quantity and quality of 11 vitamins of public health priority: folate, choline, riboflavin, thiamin, niacin, and vitamins A, B6, B12, C, D, and E.</span></li>
+<li style="font-weight: 400;"><strong>Minerals:</strong><span style="font-weight: 400;"> This score reflects the quantity and quality of 5 protective minerals of public health priority: iron, zinc, calcium, potassium, and magnesium.&nbsp;</span></li>
+<li style="font-weight: 400;"><strong>Essential amino acids (EAA): </strong><span style="font-weight: 400;">This score reflects the quantity and quality of essential amino acids.</span></li>
+<li style="font-weight: 400;"><strong>Omega-3 fatty acids:</strong><span style="font-weight: 400;"> The score reflects the quantity and quality of omega-3 fatty acids.</span></li>
+<li style="font-weight: 400;"><strong>Fiber: </strong><span style="font-weight: 400;">The score reflects the quantity and quality of fiber.</span></li>
+<li style="font-weight: 400;"><strong>Calories: </strong><span style="font-weight: 400;">The score reflects the quantity of calories.</span></li>
+<li style="font-weight: 400;"><strong>Nutrient ratios: </strong><span style="font-weight: 400;">This score reflects the increased risk for noncommunicable diseases from consuming foods (1) high in carbohydrates and low in fiber, (2) high in sodium and low in potassium, and/or (3) high in saturated fat and low in unsaturated fat.</span></li>
+</ol>
+<p><span style="font-weight: 400;">We also present a </span><strong>Nutrient Density Score (NDS)</strong><span style="font-weight: 400;">, which is calculated as a weighted average of the scores for vitamins, minerals, essential amino acids, and omega-3 fatty acids. The NDS score can be used to identify nutrient dense foods to be targeted in policies and programs seeking to address essential nutrient deficiencies and associated undernutrition.</span></p>
+<p><span style="font-weight: 400;">Currently, the NVS has only been calculated using food composition tables from two countries&nbsp; &ndash; Indonesia and Bangladesh &ndash; but we plan to expand this work to all countries globally.</span></p>

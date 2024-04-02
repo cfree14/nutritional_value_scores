@@ -1,7 +1,7 @@
 
 # Plot overall
-# country <- "Indonesia"; data <- scores
-plot_overall <- function(data, country, base_theme){
+# country <- "Indonesia"; data <- scores; score_name <- "Overall"
+plot_overall <- function(data, score_name, group_yn, country, base_theme){
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
@@ -9,21 +9,67 @@ plot_overall <- function(data, country, base_theme){
   # Format data
   country_do <- country
   sdata <- data %>% 
-    filter(country==country_do)
+    # Reduce to country of interest
+    filter(country==country_do) %>% 
+    # Reshape to ultimaely reduce to variable of interest
+    gather(key="metric", value="score", 5:ncol(.)) %>% 
+    # Rename scores
+    mutate(metric=gsub("_", " ", metric) %>% stringr::str_to_sentence(.),
+           metric=recode(metric,
+                         "Vitamin"="1. Vitamin",
+                         "Mineral"="2. Mineral",
+                         "Eaa"="3. EAA",
+                         "Omega3"="4. Omega-3",
+                         "Fiber"="5. Fiber",
+                         "Calorie density"="6. Calorie density",
+                         "Nutrient ratio"="7. Nutrient ratio",
+                         "Nutrient density"="Nutrient density")) %>% 
+    # Filter to variable of interest
+    filter(metric==score_name)
   
-  # Plot data
-  ggplot(sdata, aes(y=reorder(food, overall), x=overall, fill=food_group)) +
-    geom_bar(stat="identity") +
-    # Labels
-    labs(x="Nutritional value score", y="") +
-    # Legend
-    scale_fill_manual(name="Food group", values=food_group_colors) +
-    # Theme
-    theme_bw() + base_theme #+
-    # theme(legend.position = c(0.7, 0.05),
-    #       legend.key.size = unit(0.3, "cm"))
-
+  # X-axis title
+  x_title <- paste(sub("^\\d+\\.\\s", "", score_name), "score")
+  
+  # Max x value
+  xmax <- max(sdata$score) + 5
+  
+  # If grouping
+  if(group_yn=="No"){
+    
+    # Plot data
+    ggplot(sdata, aes(y=reorder(food, score), x=score, fill=food_group)) +
+      geom_bar(stat="identity") +
+      geom_text(mapping=aes(label=round(score,0), color=food_group), show.legend = F, hjust=-0.2) +
+      # Labels
+      labs(x=x_title, y="") +
+      scale_x_continuous(sec.axis = dup_axis(), lim=c(NA, xmax)) +
+      # Legend
+      scale_fill_manual(name="Food group", values=food_group_colors) +
+      scale_color_manual(name="Food group", values=food_group_colors) +
+      # Theme
+      theme_bw() + base_theme
+    
+  }else{
+    
+    # Plot data
+    ggplot(sdata, aes(y=reorder(food, score), x=score, fill=food_group)) +
+      facet_grid(food_group~., space="free_y", scales="free_y", labeller = label_wrap_gen(10) ) +
+      geom_bar(stat="identity") +
+      geom_text(mapping=aes(label=round(score,0), color=food_group), show.legend = F, hjust=-0.2) +
+      # Labels
+      labs(x=x_title, y="") +
+      scale_x_continuous(sec.axis = dup_axis(), lim=c(NA, xmax)) +
+      # Legend
+      scale_fill_manual(name="Food group", values=food_group_colors) +
+      scale_color_manual(name="Food group", values=food_group_colors) +
+      # Theme
+      theme_bw() + base_theme 
+    
+  }
+  
 }
+
+
 
 # Plot boxplot
 plot_boxplot <- function(data, country, base_theme){
@@ -39,13 +85,13 @@ plot_boxplot <- function(data, country, base_theme){
     gather(key="metric", value="score", 5:ncol(.)) %>% 
     mutate(metric=recode_factor(metric, 
                                 "overall"="Overall",
-                                "vitmain"="Vitamin",        
-                                "mineral"="Mineral",         
-                                "eaa"="EAA",              
-                                "omega3"="Omega-3 fatty acid",          
-                                "fiber"="Fiber",            
-                                "nutrient_ratio"="Nutrient ratio",   
-                                "calorie_density"="Calorie density",  
+                                "vitamin"="1. Vitamin",        
+                                "mineral"="2. Mineral",         
+                                "eaa"="3. EAA",              
+                                "omega3"="4. Omega-3 fatty acid",          
+                                "fiber"="5. Fiber",
+                                "calorie_density"="6. Calorie density",
+                                "nutrient_ratio"="7. Nutrient ratio",   
                                 "nutrient_density"="Nutrient density"))
   
   # Calculate stats
@@ -65,7 +111,7 @@ plot_boxplot <- function(data, country, base_theme){
     facet_wrap(~metric, ncol=3, scale="free_x") +
     geom_boxplot() +
     # Labels
-    labs(x="Score", y="") +
+    labs(x="Nutritional value score", y="") +
     # Legend
     scale_fill_manual(values=food_group_colors) +
     # Theme
@@ -73,6 +119,82 @@ plot_boxplot <- function(data, country, base_theme){
     theme(legend.position="none")
   
 }
+
+
+# # Plot overall
+# # country <- "Indonesia"; data <- scores; food_group <- "Animal-source foods"
+# plot_barplot <- function(data, country, food_group, base_theme){
+#   
+#   # Food groups
+#   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+#   
+#   # Format data
+#   country_do <- country
+#   sdata <- data %>% 
+#     filter(country==country_do)
+#   
+#   # If one food group
+#   food_group_do <- food_group
+#   if(food_group!="Overall"){
+#     sdata <- sdata %>% 
+#       filter(food_group==food_group_do)
+#   }
+#   
+#   # Plot data
+#   ggplot(sdata, aes(y=reorder(food, overall), x=overall, fill=food_group)) +
+#     geom_bar(stat="identity") +
+#     # Labels
+#     labs(x="Nutritional value score", y="") +
+#     # Legend
+#     scale_fill_manual(name="Food group", values=food_group_colors) +
+#     # Theme
+#     theme_bw() + base_theme #+
+#   # theme(legend.position = c(0.7, 0.05),
+#   #       legend.key.size = unit(0.3, "cm"))
+#   
+# }
   
 
 
+
+# plot_overall <- function(data, group_yn, country, base_theme){
+#   
+#   # Food groups
+#   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+#   
+#   # Format data
+#   country_do <- country
+#   sdata <- data %>% 
+#     filter(country==country_do)
+#   
+#   # If grouping
+#   if(group_yn=="No"){
+#     
+#     # Plot data
+#     ggplot(sdata, aes(y=reorder(food, overall), x=overall, fill=food_group)) +
+#       geom_bar(stat="identity") +
+#       # Labels
+#       labs(x="Nutritional value score", y="") +
+#       # Legend
+#       scale_fill_manual(name="Food group", values=food_group_colors) +
+#       # Theme
+#       theme_bw() + base_theme #+
+#     # theme(legend.position = c(0.7, 0.05),
+#     #       legend.key.size = unit(0.3, "cm"))
+#     
+#   }else{
+#     
+#     # Plot data
+#     ggplot(sdata, aes(y=reorder(food, overall), x=overall, fill=food_group)) +
+#       facet_grid(food_group~., space="free_y", scales="free_y", labeller = label_wrap_gen(10) ) +
+#       geom_bar(stat="identity") +
+#       # Labels
+#       labs(x="Nutritional value score", y="") +
+#       # Legend
+#       scale_fill_manual(name="Food group", values=food_group_colors) +
+#       # Theme
+#       theme_bw() + base_theme 
+#     
+#   }
+#   
+# }

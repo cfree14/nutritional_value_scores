@@ -11,6 +11,10 @@ library(shiny)
 library(shinythemes)
 library(tidyverse)
 library(RColorBrewer)
+library(shinyjs) # javascript functionality for shiny
+library(shinydashboard) # layout
+library(shinyWidgets)
+library(rsconnect) #
 
 # Directories
 datadir <- "data" # for actual app
@@ -24,6 +28,9 @@ scores_orig <- readRDS(file.path(datadir, "scores.Rds"))
 # Read scripts
 sapply(list.files(codedir), function(x) source(file.path(codedir, x)))
 
+# Read intro text
+intro_text <- readr::read_file(file=file.path(datadir, "intro_text.txt"))
+
 
 # Format data
 ################################################################################
@@ -31,15 +38,23 @@ sapply(list.files(codedir), function(x) source(file.path(codedir, x)))
 # Food groups
 food_groups <- c("Fruits", "Vegetables", "Legumes, nuts, seeds", "Animal-source foods", "Starchy staples")
 
+# Scores
+score_names <- c("Overall", "Vitamin", "Mineral", "EAA", "Omega-3", "Fiber", 
+                 "Calorie density", "Nutrient ratio", "Nutrient density")
+
 # Format data
 scores <- scores_orig %>% 
   # Format food group
   mutate(food_group=recode(food_group,
                            "Pulses, nuts, and seeds"="Legumes, nuts, seeds"),
-         food_group=factor(food_group, levels=food_groups))
+         food_group=factor(food_group, levels=food_groups)) %>% 
+  # Format calorie density
+  mutate(calorie_density=abs(calorie_density))
 
 # Countries
 countries <- scores$country %>% unique()
+
+
 
 
 # Themes
@@ -50,7 +65,7 @@ base_theme <- theme(axis.text=element_text(size=12),
                     axis.title=element_text(size=13),
                     legend.text=element_text(size=12),
                     legend.title=element_text(size=13),
-                    strip.text = element_text(size=13),
+                    strip.text = element_text(size=12),
                     # Gridlines
                     panel.grid.major = element_blank(), 
                     panel.grid.minor = element_blank(),
@@ -67,28 +82,61 @@ base_theme <- theme(axis.text=element_text(size=12),
 ui <- fluidPage(
 
   # Title
-  titlePanel("Nutritional value score exploration tool"),
+  titlePanel("Nutritional Value Score (NVS) exploration tool"),
+  
+  # Intro text
+  h3("Background"),
+  HTML(intro_text),
+  br(),
 
   # Select species
+  h3("Data explorer"),
+  p("Select a country to begin data exploration."),
   selectInput(inputId = "country", label = "Select a country:",
               choices = countries,  multiple = F, selected=countries[1]),
   br(),
   
   # Broad results
-  h3("Broad results"),
+  h4("Broad results"),
   
   # Plot boxplot
-  HTML("<b>Figure 2</b>. Distribution of overall nutritional value score and contributing subscores by food group. Food groups are sorted in order of descending median overall nutritional value score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
+  p("The figure below illustrates the distribution of nutritional value scores by food group. Food groups are sorted in order of descending median overall nutritional value score. Subscores 1-7 contribute to the overall nutritional value score. Subscores 1-4 contribute to the nutrient density score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
   plotOutput(outputId = "plot_boxplot", width=700, height=450),
   br(),
+
+  # Detailed results
+  h4("Detailed results"),
+  p("The figure below illustrates nutritional value scores of specific foods. Subscores 1-7 contribute to the overall nutritional value score. Subscores 1-4 contribute to the nutrient density score."),
   br(),
   
-  # Detailed results
-  h3("Detailed results"),
+  # Group?
+  shinyWidgets::radioGroupButtons(inputId="group_yn", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
+  
+  # Score panels
+  tabsetPanel(id= "tabs",
+              tabPanel("Overall"),
+              tabPanel("1. Vitamin"),
+              tabPanel("2. Mineral"),
+              tabPanel("3. EAA"),
+              tabPanel("4. Omega-3"),
+              tabPanel("5. Fiber"),
+              tabPanel("6. Calorie density"),
+              tabPanel("7. Nutrient ratio"),
+              tabPanel("Nutrient density")
+  ),
 
-  # Plot historical comparison
-  HTML("<b>Figure 1</b>. Nutritional value score of foods. Foods are sorted in order of decreasing nutritional value score. Color indicates the broader food group."),
-  plotOutput(outputId = "plot_overall", width=650, height=950)
+  # Plot scores
+  plotOutput(outputId = "plot_overall", width=650, height=1100),
+  
+  # Citation
+  h4("Citation"),
+  p("Please cite this Shiny app and its results using the following paper:"),
+  HTML('<p><span style="font-weight: 400;">Beal T, Ortenzi F (</span><em><span style="font-weight: 400;">in review</span></em><span style="font-weight: 400;">) Nutritional Value Score rates foods based on global health priorities. Available at: </span><a href="https://www.researchsquare.com/article/rs-3443927/v1"><span style="font-weight: 400;">https://www.researchsquare.com/article/rs-3443927/v1</span> </a></p>'),
+  br(),
+  br(),
+  br()
+  
+
 
 )
 
@@ -98,18 +146,20 @@ ui <- fluidPage(
 
 # Server
 server <- function(input, output, session){
-
+  
   # Plot data
-  output$plot_overall <- renderPlot({
-    g <- plot_overall(data = scores,
+  output$plot_boxplot <- renderPlot({
+    g <- plot_boxplot(data = scores,
                       country=input$country,
                       base_theme=base_theme)
     g
   })
   
   # Plot data
-  output$plot_boxplot <- renderPlot({
-    g <- plot_boxplot(data = scores,
+  output$plot_overall <- renderPlot({
+    g <- plot_overall(data = scores,
+                      score = input$tabs,
+                      group = input$group_yn,
                       country=input$country,
                       base_theme=base_theme)
     g
