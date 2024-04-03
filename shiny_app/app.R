@@ -55,8 +55,6 @@ scores <- scores_orig %>%
 countries <- scores$country %>% unique()
 
 
-
-
 # Themes
 ################################################################################
 
@@ -100,10 +98,25 @@ ui <- fluidPage(
   h4("Broad results"),
   
   # Plot boxplot
-  p("The figure below illustrates the distribution of Nutritional Value Scores by food group. Food groups are sorted in order of descending median overall Nutritional Value Score. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 also contribute to the Nutrient Density Score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
-  plotOutput(outputId = "plot_boxplot", width=900, height=700),
+  p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different food group. Food groups are sorted in order of descending median Nutritional Value Score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 also contribute to the Nutrient Density Score."),
+  
+  # Score panels
+  tabsetPanel(id= "tabs1",
+              tabPanel("Overall"),
+              tabPanel("1. Vitamin"),
+              tabPanel("2. Mineral"),
+              tabPanel("3. EAA"),
+              tabPanel("4. Omega-3"),
+              tabPanel("5. Fiber"),
+              tabPanel("6. Calorie density"),
+              tabPanel("7. Nutrient ratio"),
+              tabPanel("Nutrient density")
+  ),
+  
+  # Plot data
+  plotOutput(outputId = "plot_boxplot", width=700, height=500),
   br(),
-
+  
   # Detailed results
   h4("Detailed results"),
   p("The figure below illustrates Nutritional Value Scores of specific foods. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 contribute to the Nutrient Density Score."),
@@ -113,7 +126,7 @@ ui <- fluidPage(
   shinyWidgets::radioGroupButtons(inputId="group_yn", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
   
   # Score panels
-  tabsetPanel(id= "tabs",
+  tabsetPanel(id= "tabs2",
               tabPanel("Overall"),
               tabPanel("1. Vitamin"),
               tabPanel("2. Mineral"),
@@ -151,6 +164,7 @@ server <- function(input, output, session){
   output$plot_boxplot <- renderPlot({
     g <- plot_boxplot(data = scores,
                       country=input$country,
+                      score=input$tabs1,
                       base_theme=base_theme)
     g
   })
@@ -158,7 +172,7 @@ server <- function(input, output, session){
   # Plot data
   output$plot_overall <- renderPlot({
     g <- plot_overall(data = scores,
-                      score = input$tabs,
+                      score = input$tabs2,
                       group = input$group_yn,
                       country=input$country,
                       base_theme=base_theme)

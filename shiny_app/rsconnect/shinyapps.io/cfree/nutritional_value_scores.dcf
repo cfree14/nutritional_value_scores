@@ -5,9 +5,9 @@ account: cfree
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11548394
-bundleId: 8450969
+bundleId: 8451558
 url: https://cfree.shinyapps.io/nutritional_value_scores/
-when: 1712165524.81553
-lastSyncTime: 1712165524.81554
+when: 1712176011.19309
+lastSyncTime: 1712176011.1931
 asMultiple: FALSE
 asStatic: FALSE

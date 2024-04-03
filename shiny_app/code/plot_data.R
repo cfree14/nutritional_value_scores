@@ -73,7 +73,7 @@ plot_overall <- function(data, score_name, group_yn, country, base_theme){
 
 # Plot boxplots
 # country <- "Indonesia"; data <- scores; score_name <- "Overall"
-plot_boxplot <- function(data, country, base_theme){
+plot_boxplot <- function(data, country, score_name, base_theme){
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
@@ -89,15 +89,15 @@ plot_boxplot <- function(data, country, base_theme){
                                 "vitamin"="1. Vitamin",        
                                 "mineral"="2. Mineral",         
                                 "eaa"="3. EAA",              
-                                "omega3"="4. Omega-3 fatty acid",          
+                                "omega3"="4. Omega-3",          
                                 "fiber"="5. Fiber",
                                 "calorie_density"="6. Calorie density",
                                 "nutrient_ratio"="7. Nutrient ratio",   
-                                "nutrient_density"="Nutrient density"))
+                                "nutrient_density"="Nutrient density")) %>% 
+    filter(metric==score_name)
   
   # Calculate stats
   stats <- sdata_long %>% 
-    filter(metric=="Overall") %>% 
     group_by(dqq_food_group) %>% 
     summarize(score=median(score)) %>% 
     ungroup() %>% 
@@ -107,12 +107,16 @@ plot_boxplot <- function(data, country, base_theme){
   sdata_long_ordered <- sdata_long %>% 
     mutate(dqq_food_group=factor(dqq_food_group, levels=stats$dqq_food_group))
   
+  # X-axis title
+  x_title <- paste(sub("^\\d+\\.\\s", "", score_name), "score")
+  
   # Plot gata 
   ggplot(sdata_long_ordered, aes(y=dqq_food_group, x=score, fill=food_group)) +
-    facet_wrap(~metric, ncol=3, scale="free_x") +
+    stat_boxplot(geom = "errorbar", width = 0.2) + 
     geom_boxplot() +
     # Labels
-    labs(x="Nutritional value score", y="") +
+    labs(x=x_title, y="") +
+    scale_x_continuous(sec.axis = dup_axis()) +
     # Legend
     scale_fill_manual(name="Food group", values=food_group_colors) +
     # Theme
