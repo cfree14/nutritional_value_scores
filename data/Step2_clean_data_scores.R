@@ -26,11 +26,12 @@ food_key <- readRDS(file.path(outdir, "food_key.Rds"))
 # Format data
 data <- data_orig %>% 
   # Rename
+  # NOTE: EAA AND OMEGA-3 ARE MISLABELLED AND CORRECTED HERE
   janitor::clean_names("snake") %>% 
   rename(vitamin=vitamin_score,
          mineral=mineral_score,
-         eaa=eaa_score,
-         omega3=omega_3_fat_score,
+         omega3=eaa_score, # mislabeled
+         eaa=omega_3_fat_score, # mislabeled
          fiber=fiber_score,
          nutrient_ratio=nutrient_ratio_score,
          calorie_density=calorie_density_score,
@@ -47,6 +48,7 @@ data <- data_orig %>%
 # Inspect
 str(data)
 freeR::complete(data)
+
 
 # Export data
 ################################################################################

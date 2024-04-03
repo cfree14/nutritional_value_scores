@@ -14,7 +14,7 @@ library(RColorBrewer)
 library(shinyjs) # javascript functionality for shiny
 library(shinydashboard) # layout
 library(shinyWidgets)
-library(rsconnect) #
+library(rsconnect)
 
 # Directories
 datadir <- "data" # for actual app
@@ -100,13 +100,13 @@ ui <- fluidPage(
   h4("Broad results"),
   
   # Plot boxplot
-  p("The figure below illustrates the distribution of nutritional value scores by food group. Food groups are sorted in order of descending median overall nutritional value score. Subscores 1-7 contribute to the overall nutritional value score. Subscores 1-4 contribute to the nutrient density score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
-  plotOutput(outputId = "plot_boxplot", width=700, height=450),
+  p("The figure below illustrates the distribution of Nutritional Value Scores by food group. Food groups are sorted in order of descending median overall Nutritional Value Score. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 also contribute to the Nutrient Density Score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers."),
+  plotOutput(outputId = "plot_boxplot", width=900, height=700),
   br(),
 
   # Detailed results
   h4("Detailed results"),
-  p("The figure below illustrates nutritional value scores of specific foods. Subscores 1-7 contribute to the overall nutritional value score. Subscores 1-4 contribute to the nutrient density score."),
+  p("The figure below illustrates Nutritional Value Scores of specific foods. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 contribute to the Nutrient Density Score."),
   br(),
   
   # Group?
@@ -129,7 +129,7 @@ ui <- fluidPage(
   plotOutput(outputId = "plot_overall", width=650, height=1100),
   
   # Citation
-  h4("Citation"),
+  h3("Citation"),
   p("Please cite this Shiny app and its results using the following paper:"),
   HTML('<p><span style="font-weight: 400;">Beal T, Ortenzi F (</span><em><span style="font-weight: 400;">in review</span></em><span style="font-weight: 400;">) Nutritional Value Score rates foods based on global health priorities. Available at: </span><a href="https://www.researchsquare.com/article/rs-3443927/v1"><span style="font-weight: 400;">https://www.researchsquare.com/article/rs-3443927/v1</span> </a></p>'),
   br(),
