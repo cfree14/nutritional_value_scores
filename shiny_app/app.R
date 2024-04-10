@@ -95,22 +95,21 @@ ui <- fluidPage(
   br(),
   
   # Broad results
-  h4("Broad results"),
+  h4("Scores by food group"),
   
   # Plot boxplot
-  p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different food group. Food groups are sorted in order of descending median Nutritional Value Score. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 also contribute to the Nutrient Density Score."),
+  p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
   
   # Score panels
   tabsetPanel(id= "tabs1",
-              tabPanel("Overall"),
-              tabPanel("1. Vitamin"),
-              tabPanel("2. Mineral"),
-              tabPanel("3. EAA"),
+              tabPanel("NVS"),
+              tabPanel("1. Vitamins"),
+              tabPanel("2. Minerals"),
+              tabPanel("3. Protein"),
               tabPanel("4. Omega-3"),
               tabPanel("5. Fiber"),
-              tabPanel("6. Calorie density"),
-              tabPanel("7. Nutrient ratio"),
-              tabPanel("Nutrient density")
+              tabPanel("6. Calories"),
+              tabPanel("7. Nutrient ratios")
   ),
   
   # Plot data
@@ -118,8 +117,9 @@ ui <- fluidPage(
   br(),
   
   # Detailed results
-  h4("Detailed results"),
-  p("The figure below illustrates Nutritional Value Scores of specific foods. Sub-scores 1-7 contribute to the overall Nutritional Value Score. Sub-scores 1-4 contribute to the Nutrient Density Score."),
+  h4("Scores by individual foods"),
+  p("The figure below illustrates Nutritional Value Scores of specific recommended foods within the Diet Quality Questionnaire. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+  p("Ultra-processed foods and culinary ingredients are currently excluded from the NVS. Future versions may include these items."),
   br(),
   
   # Group?
@@ -127,15 +127,14 @@ ui <- fluidPage(
   
   # Score panels
   tabsetPanel(id= "tabs2",
-              tabPanel("Overall"),
-              tabPanel("1. Vitamin"),
-              tabPanel("2. Mineral"),
-              tabPanel("3. EAA"),
+              tabPanel("NVS"),
+              tabPanel("1. Vitamins"),
+              tabPanel("2. Minerals"),
+              tabPanel("3. Protein"),
               tabPanel("4. Omega-3"),
               tabPanel("5. Fiber"),
-              tabPanel("6. Calorie density"),
-              tabPanel("7. Nutrient ratio"),
-              tabPanel("Nutrient density")
+              tabPanel("6. Calories"),
+              tabPanel("7. Nutrient ratios")
   ),
 
   # Plot scores

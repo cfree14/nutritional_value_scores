@@ -16,13 +16,14 @@ plot_overall <- function(data, score_name, group_yn, country, base_theme){
     # Rename scores
     mutate(metric=gsub("_", " ", metric) %>% stringr::str_to_sentence(.),
            metric=recode(metric,
-                         "Vitamin"="1. Vitamin",
-                         "Mineral"="2. Mineral",
-                         "Eaa"="3. EAA",
+                         "Overall"="NVS",
+                         "Vitamin"="1. Vitamins",
+                         "Mineral"="2. Minerals",
+                         "Eaa"="3. Protein",
                          "Omega3"="4. Omega-3",
                          "Fiber"="5. Fiber",
-                         "Calorie density"="6. Calorie density",
-                         "Nutrient ratio"="7. Nutrient ratio",
+                         "Calorie density"="6. Calories",
+                         "Nutrient ratio"="7. Nutrient ratios",
                          "Nutrient density"="Nutrient density")) %>% 
     # Filter to variable of interest
     filter(metric==score_name)
@@ -85,21 +86,21 @@ plot_boxplot <- function(data, country, score_name, base_theme){
   sdata_long <- sdata %>% 
     gather(key="metric", value="score", 5:ncol(.)) %>% 
     mutate(metric=recode_factor(metric, 
-                                "overall"="Overall",
-                                "vitamin"="1. Vitamin",        
-                                "mineral"="2. Mineral",         
-                                "eaa"="3. EAA",              
+                                "overall"="NVS",
+                                "vitamin"="1. Vitamins",        
+                                "mineral"="2. Minerals",         
+                                "eaa"="3. Protein",              
                                 "omega3"="4. Omega-3",          
                                 "fiber"="5. Fiber",
-                                "calorie_density"="6. Calorie density",
-                                "nutrient_ratio"="7. Nutrient ratio",   
+                                "calorie_density"="6. Calories",
+                                "nutrient_ratio"="7. Nutrient ratios",   
                                 "nutrient_density"="Nutrient density")) %>% 
     filter(metric==score_name)
   
   # Calculate stats
   stats <- sdata_long %>% 
     group_by(dqq_food_group) %>% 
-    summarize(score=median(score)) %>% 
+    summarize(score=mean(score)) %>% 
     ungroup() %>% 
     arrange(score)
   
@@ -112,7 +113,7 @@ plot_boxplot <- function(data, country, score_name, base_theme){
   
   # Plot gata 
   ggplot(sdata_long_ordered, aes(y=dqq_food_group, x=score, fill=food_group)) +
-    stat_boxplot(geom = "errorbar", width = 0.2) + 
+    stat_boxplot(geom = "errorbar", width = 0.4) + 
     geom_boxplot() +
     # Labels
     labs(x=x_title, y="") +
