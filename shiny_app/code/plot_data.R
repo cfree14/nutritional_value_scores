@@ -29,7 +29,16 @@ plot_overall <- function(data, score_name, group_yn, country, base_theme){
     filter(metric==score_name)
   
   # X-axis title
-  x_title <- paste(sub("^\\d+\\.\\s", "", score_name), "score")
+  x_title <- recode(score_name, 
+                    "NVS"="Nutritional Value Score",
+                    "1. Vitamins"="Vitamin score",
+                    "2. Minerals"="Mineral score",
+                    "3. Protein"="Protein score",
+                    "4. Omega-3"="Omega-3 score",
+                    "5. Fiber"="Fiber score",
+                    "6. Calories"="Calorie score",
+                    "7. Nutrient ratios"="Nutrient ratio score",
+                    "Nutrient density"="Nutrient Density Score")
   
   # Max x value
   xmax <- max(sdata$score) + 5
@@ -73,7 +82,7 @@ plot_overall <- function(data, score_name, group_yn, country, base_theme){
 
 
 # Plot boxplots
-# country <- "Indonesia"; data <- scores; score_name <- "Overall"
+# country <- "Indonesia"; data <- scores; score_name <- "NVS"
 plot_boxplot <- function(data, country, score_name, base_theme){
   
   # Food groups
@@ -99,22 +108,33 @@ plot_boxplot <- function(data, country, score_name, base_theme){
   
   # Calculate stats
   stats <- sdata_long %>% 
-    group_by(dqq_food_group) %>% 
+    group_by(food_group, dqq_food_group) %>% 
     summarize(score=mean(score)) %>% 
     ungroup() %>% 
-    arrange(score)
+    arrange(score) %>% 
+    mutate(dqq_food_group=factor(dqq_food_group, levels=dqq_food_group))
   
   # Order data
   sdata_long_ordered <- sdata_long %>% 
     mutate(dqq_food_group=factor(dqq_food_group, levels=stats$dqq_food_group))
   
   # X-axis title
-  x_title <- paste(sub("^\\d+\\.\\s", "", score_name), "score")
+  x_title <- recode(score_name, 
+                    "NVS"="Nutritional Value Score",
+                    "1. Vitamins"="Vitamin score",
+                    "2. Minerals"="Mineral score",
+                    "3. Protein"="Protein score",
+                    "4. Omega-3"="Omega-3 score",
+                    "5. Fiber"="Fiber score",
+                    "6. Calories"="Calorie score",
+                    "7. Nutrient ratios"="Nutrient ratio score",
+                    "Nutrient density"="Nutrient Density Score")
   
-  # Plot gata 
+  # Plot data 
   ggplot(sdata_long_ordered, aes(y=dqq_food_group, x=score, fill=food_group)) +
     stat_boxplot(geom = "errorbar", width = 0.4) + 
     geom_boxplot() +
+    geom_point(data=stats, mapping=aes(y=dqq_food_group, x=score, fill=food_group), shape=21, size=3) +
     # Labels
     labs(x=x_title, y="") +
     scale_x_continuous(sec.axis = dup_axis()) +

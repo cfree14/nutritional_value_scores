@@ -98,7 +98,7 @@ ui <- fluidPage(
   h4("Scores by food group"),
   
   # Plot boxplot
-  p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+  p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
   
   # Score panels
   tabsetPanel(id= "tabs1",
