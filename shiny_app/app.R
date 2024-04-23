@@ -43,7 +43,7 @@ food_groups <- c("Fruits", "Vegetables", "Legumes, nuts, seeds", "Animal-source 
 score_names <- c("Overall", "Vitamin", "Mineral", "EAA", "Omega-3", "Fiber", 
                  "Calorie density", "Nutrient ratio", "Nutrient density")
 
-# Format data
+# Format scores
 scores <- scores_orig %>% 
   # Format food group
   mutate(food_group=recode(food_group,
@@ -51,6 +51,13 @@ scores <- scores_orig %>%
          food_group=factor(food_group, levels=food_groups)) %>% 
   # Format calorie density
   mutate(calorie_density=abs(calorie_density))
+
+# Format LCA
+lca <- lca_orig %>% 
+  # Format food group
+  mutate(food_group=recode(food_group,
+                           "Pulses, nuts, and seeds"="Legumes, nuts, seeds"),
+         food_group=factor(food_group, levels=food_groups))
 
 # Countries
 countries <- scores$country %>% unique()
@@ -184,7 +191,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     ),
     
     # Plot LCA by category
-    plotOutput(outputId = "plot_lca_catg", width=650, height=1100),
+    plotOutput(outputId = "plot_lca_catg", width=1100, height=1000),
            
     # Life stage
     h4("Impact by life stage"),
@@ -205,7 +212,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     ),
     
     # Plot LCA by life stage
-    plotOutput(outputId = "plot_lca_stage", width=650, height=1100),
+    plotOutput(outputId = "plot_lca_stage", width=1100, height=1000),
     
   )
   
@@ -239,10 +246,9 @@ server <- function(input, output, session){
   
   # Plot LCA by category
   output$plot_lca_catg <- renderPlot({
-    g <- plot_lca(data = lca_orig,
+    g <- plot_lca(data = lca,
                   country=input$country2,
                   factor=input$tabs3,
-                  unit = "mPT/kg",
                   group = input$group_yn2,
                   base_theme=base_theme)
     g
@@ -250,11 +256,10 @@ server <- function(input, output, session){
   
   # Plot LCA by life stage
   output$plot_lca_stage <- renderPlot({
-    g <- plot_lca(data = lca_orig,
+    g <- plot_lca(data = lca,
                   country=input$country2,
                   factor=input$tabs4,
-                  unit = "mPT/kg",
-                  group = input$group_yn2,
+                  group = input$group_yn3,
                   base_theme=base_theme)
     g
   })
