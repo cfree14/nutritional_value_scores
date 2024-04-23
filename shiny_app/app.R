@@ -77,79 +77,83 @@ base_theme <- theme(axis.text=element_text(size=12),
 ################################################################################
 
 # User interface
-ui <- fluidPage(
-
-  # Title
-  titlePanel("Nutritional Value Score (NVS) exploration tool"),
+ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
   
-  # Intro text
-  h3("Background"),
-  HTML(intro_text),
-  br(),
-
-  # Select species
-  h3("Data explorer"),
-  p("Select a country to begin data exploration."),
-  selectInput(inputId = "country", label = "Select a country:",
-              choices = countries,  multiple = F, selected=countries[1]),
-  br(),
+  # Nutritional value
+  tabPanel("Nutritional value",
   
-  # Broad results
-  h4("Scores by food group"),
+    # Intro text
+    h3("Background"),
+    HTML(intro_text),
+    br(),
   
-  # Plot boxplot
-  p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+    # Select species
+    h3("Data explorer"),
+    p("Select a country to begin data exploration."),
+    selectInput(inputId = "country", label = "Select a country:",
+                choices = countries,  multiple = F, selected=countries[1]),
+    br(),
+    
+    # Broad results
+    h4("Scores by food group"),
+    
+    # Plot boxplot
+    p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+    
+    # Score panels
+    tabsetPanel(id= "tabs1",
+                tabPanel("NVS"),
+                tabPanel("1. Vitamins"),
+                tabPanel("2. Minerals"),
+                tabPanel("3. Protein"),
+                tabPanel("4. Omega-3"),
+                tabPanel("5. Fiber"),
+                tabPanel("6. Calories"),
+                tabPanel("7. Nutrient ratios")
+    ),
+    
+    # Plot data
+    plotOutput(outputId = "plot_boxplot", width=700, height=500),
+    br(),
+    
+    # Detailed results
+    h4("Scores by individual foods"),
+    p("The figure below illustrates Nutritional Value Scores of specific recommended foods within the Diet Quality Questionnaire. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+    p("Ultra-processed foods and culinary ingredients are currently excluded from the NVS. Future versions may include these items."),
+    br(),
+    
+    # Group?
+    shinyWidgets::radioGroupButtons(inputId="group_yn", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
+    
+    # Score panels
+    tabsetPanel(id= "tabs2",
+                tabPanel("NVS"),
+                tabPanel("1. Vitamins"),
+                tabPanel("2. Minerals"),
+                tabPanel("3. Protein"),
+                tabPanel("4. Omega-3"),
+                tabPanel("5. Fiber"),
+                tabPanel("6. Calories"),
+                tabPanel("7. Nutrient ratios")
+    ),
   
-  # Score panels
-  tabsetPanel(id= "tabs1",
-              tabPanel("NVS"),
-              tabPanel("1. Vitamins"),
-              tabPanel("2. Minerals"),
-              tabPanel("3. Protein"),
-              tabPanel("4. Omega-3"),
-              tabPanel("5. Fiber"),
-              tabPanel("6. Calories"),
-              tabPanel("7. Nutrient ratios")
+    # Plot scores
+    plotOutput(outputId = "plot_overall", width=650, height=1100),
+    
+    # Citation
+    h3("Citation"),
+    p("Please cite this Shiny app and its results using the following paper:"),
+    HTML('<p><span style="font-weight: 400;">Beal T, Ortenzi F (</span><em><span style="font-weight: 400;">in review</span></em><span style="font-weight: 400;">) Nutritional Value Score rates foods based on global health priorities. Available at: </span><a href="https://www.researchsquare.com/article/rs-3443927/v1"><span style="font-weight: 400;">https://www.researchsquare.com/article/rs-3443927/v1</span> </a></p>'),
+    br(),
+    br(),
+    br()
+    
   ),
   
-  # Plot data
-  plotOutput(outputId = "plot_boxplot", width=700, height=500),
-  br(),
+  # Environmental impact
+  tabPanel("Environmental impact",
+  )
   
-  # Detailed results
-  h4("Scores by individual foods"),
-  p("The figure below illustrates Nutritional Value Scores of specific recommended foods within the Diet Quality Questionnaire. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
-  p("Ultra-processed foods and culinary ingredients are currently excluded from the NVS. Future versions may include these items."),
-  br(),
-  
-  # Group?
-  shinyWidgets::radioGroupButtons(inputId="group_yn", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
-  
-  # Score panels
-  tabsetPanel(id= "tabs2",
-              tabPanel("NVS"),
-              tabPanel("1. Vitamins"),
-              tabPanel("2. Minerals"),
-              tabPanel("3. Protein"),
-              tabPanel("4. Omega-3"),
-              tabPanel("5. Fiber"),
-              tabPanel("6. Calories"),
-              tabPanel("7. Nutrient ratios")
-  ),
-
-  # Plot scores
-  plotOutput(outputId = "plot_overall", width=650, height=1100),
-  
-  # Citation
-  h3("Citation"),
-  p("Please cite this Shiny app and its results using the following paper:"),
-  HTML('<p><span style="font-weight: 400;">Beal T, Ortenzi F (</span><em><span style="font-weight: 400;">in review</span></em><span style="font-weight: 400;">) Nutritional Value Score rates foods based on global health priorities. Available at: </span><a href="https://www.researchsquare.com/article/rs-3443927/v1"><span style="font-weight: 400;">https://www.researchsquare.com/article/rs-3443927/v1</span> </a></p>'),
-  br(),
-  br(),
-  br()
-  
-
-
 )
 
 
