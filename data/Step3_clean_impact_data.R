@@ -37,15 +37,20 @@ data <- data_orig %>%
   janitor::clean_names("snake") %>% 
   rename(food_lca=food_lc_aname,
          food_nvs=food_nv_sname) %>% 
+  # Format foods
+  mutate(food_long=case_when(country=="Bangladesh" & food_long=="Lean fish, average of various species consumed in Indonesia and of different cooking methods" ~ "Lean fish, average of various species consumed in Bangladesh and of different cooking methods",
+                               T ~ food_long)) %>% 
   # Spread
-  # select(-metric)
-  # spread(key="quantile", value="value") %>% 
+  # select(-metric) %>% 
+  # spread(key="quantile", value="value") %>%
   # rename(value="50",
   #        value_lo="2.5",
-  #        value_hi="97.5") %>% 
+  #        value_hi="97.5") %>%
+  # Remove nusance
+  select(-dqq_question) %>% 
   # Arrange
   select(country,
-         food_group, dqq_food_group, dqq_question,
+         food_group, dqq_food_group, 
          food_lca, food_nvs, food_long, 
          metric,
          category, factor, unit, 
@@ -58,6 +63,10 @@ data <- data_orig %>%
 table(data$country)
 
 # Inspect food
+food_key <- data %>% 
+  count(food_group, dqq_food_group, food_long, food_lca, food_nvs)
+
+freeR::which_duplicated(food_key$food_long)
 
 
 # Inspect

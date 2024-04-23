@@ -145,3 +145,48 @@ plot_boxplot <- function(data, country, score_name, base_theme){
   
 }
 
+
+# Plot LCA data
+# data <- lca_orig; country <- "Indonesia"; unit <- "mPT/kg"; factor <- "Primary production"
+plot_lca <- function(data, country, factor, unit, group_yn, base_theme){
+  
+  # Params
+  unit_do <- unit
+  country_do <- country
+  factor_do <- factor
+  
+  # Format data
+  sdata <- data %>% 
+    filter(country==country_do & unit==unit_do & factor==factor_do)
+  
+  # Food groups
+  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+  
+  # Plot data
+  xtitle <- paste0("Impact of\n", tolower(factor_do))
+  ggplot(sdata, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
+    # facet_grid(food_group~., space="free_y", scale="free_y") +
+    geom_bar(stat="identity") +
+    # Labels
+    labs(x=xtitle, y="") +
+    # Legend
+    scale_fill_manual(name="Food group", values=food_group_colors) +
+    # Theme
+    theme_bw() + base_theme
+  
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

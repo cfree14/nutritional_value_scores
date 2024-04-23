@@ -24,6 +24,7 @@ codedir <- "code"  # for actual app
 
 # Read data
 scores_orig <- readRDS(file.path(datadir, "scores.Rds"))
+lca_orig <- readRDS(file.path(datadir, "envi_impact_data.Rds"))
 
 # Read scripts
 sapply(list.files(codedir), function(x) source(file.path(codedir, x)))
@@ -87,7 +88,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     HTML(intro_text),
     br(),
   
-    # Select species
+    # Select country
     h3("Data explorer"),
     p("Select a country to begin data exploration."),
     selectInput(inputId = "country", label = "Select a country:",
@@ -152,6 +153,60 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
   
   # Environmental impact
   tabPanel("Environmental impact",
+           
+     # Intro text
+     h3("Background"),
+     p("Background text coming soon."),
+     br(),
+           
+     # Select country
+     h3("Data explorer"),
+     p("Select a country to begin data exploration."),
+     selectInput(inputId = "country2", label = "Select a country:",
+                 choices = countries,  multiple = F, selected=countries[1]),
+     br(),
+           
+    # Life stage
+    h4("Impact by category"),
+    p("Figure text."),
+    shinyWidgets::radioGroupButtons(inputId="group_yn2", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
+    
+    # Category panels
+    tabsetPanel(id= "tabs3",
+                tabPanel("Overall"),
+                tabPanel("Acidification"),
+                tabPanel("Particulate matter"),
+                tabPanel("Eutrophication"),
+                tabPanel("Land use"),
+                tabPanel("Resource use fossils"),
+                tabPanel("Water use"),
+                tabPanel("Other")
+    ),
+    
+    # Plot LCA by category
+    plotOutput(outputId = "plot_lca_catg", width=650, height=1100),
+           
+    # Life stage
+    h4("Impact by life stage"),
+    p("Figure text."),
+    shinyWidgets::radioGroupButtons(inputId="group_yn3", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
+    
+    # Life stage panels
+    tabsetPanel(id= "tabs4",
+                tabPanel("Overall"),
+                tabPanel("Primary production"),
+                tabPanel("Processing"),
+                tabPanel("Packaging"),
+                tabPanel("Distribution"),
+                tabPanel("Retail"),
+                tabPanel("User stage"),
+                tabPanel("Water treatment"),
+                tabPanel("Climate change")
+    ),
+    
+    # Plot LCA by life stage
+    plotOutput(outputId = "plot_lca_stage", width=650, height=1100),
+    
   )
   
 )
@@ -179,6 +234,28 @@ server <- function(input, output, session){
                       group = input$group_yn,
                       country=input$country,
                       base_theme=base_theme)
+    g
+  })
+  
+  # Plot LCA by category
+  output$plot_lca_catg <- renderPlot({
+    g <- plot_lca(data = lca_orig,
+                  country=input$country2,
+                  factor=input$tabs3,
+                  unit = "mPT/kg",
+                  group = input$group_yn2,
+                  base_theme=base_theme)
+    g
+  })
+  
+  # Plot LCA by life stage
+  output$plot_lca_stage <- renderPlot({
+    g <- plot_lca(data = lca_orig,
+                  country=input$country2,
+                  factor=input$tabs4,
+                  unit = "mPT/kg",
+                  group = input$group_yn2,
+                  base_theme=base_theme)
     g
   })
 
