@@ -147,12 +147,17 @@ plot_boxplot <- function(data, country, score_name, base_theme){
 
 
 # Plot LCA data
-# data <- lca_orig; country <- "Indonesia"; unit <- "mPT/kg"; factor <- "Primary production"; group_yn <- "Yes"
-plot_lca <- function(data, country, factor, unit, group_yn, base_theme){
+# data <- lca_orig; country <- "Indonesia"; type <- "stage", unit <- "mPT/kg"; factor <- "Overall"; group_yn <- "Yes"
+plot_lca <- function(data, country, type, factor, unit, group_yn, base_theme){
   
   # Params
   country_do <- country
   factor_do <- factor
+  
+  # Factor
+  if(factor_do=="Overall"){
+    factor_do <-ifelse(type=="catg", "Total category impact", "Total life cycle")
+  }
   
   # Format data
   sdata_kg <- data %>% 
@@ -164,29 +169,37 @@ plot_lca <- function(data, country, factor, unit, group_yn, base_theme){
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
   
   # Plot data
-  xtitle1 <- paste0("Impact of\n", tolower(factor_do), " (mPT/kg)")
+  xtitle1 <- ifelse(factor=="Overall",
+                    paste0("Overall impact (mPT/kg)"),
+                    paste0("Impact of\n", tolower(factor_do), " (mPT/kg)"))
   g1 <- ggplot(sdata_kg, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
     {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
-    geom_bar(stat="identity") +
+    geom_bar(stat="identity", alpha=0.7) +
+    geom_errorbar(mapping=aes(y=food_lca, xmin=value_lo, xmax=value_hi, color=food_group), linewidth=1, width=0) +
     # Labels
     labs(x=xtitle1, y="") +
     scale_x_continuous(sec.axis = dup_axis()) +
     # Legend
     scale_fill_manual(name="Food group", values=food_group_colors) +
+    scale_color_manual(name="Food group", values=food_group_colors) +
     # Theme
     theme_bw() + base_theme +
     theme(legend.position = "none")
   
   # Plot data
-  xtitle2 <- paste0("Impact of\n", tolower(factor_do), " (mPT/NVS)")
+  xtitle2 <- ifelse(factor=="Overall",
+                    paste0("Overall impact (mPT/NVS)"),
+                    paste0("Impact of\n", tolower(factor_do), " (mPT/NVS)"))
   g2 <- ggplot(sdata_nvs, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
     {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
-    geom_bar(stat="identity") +
+    geom_bar(stat="identity", alpha=0.7) +
+    geom_errorbar(mapping=aes(y=food_lca, xmin=value_lo, xmax=value_hi, color=food_group), linewidth=1, width=0) +
     # Labels
     labs(x=xtitle2, y="") +
     scale_x_continuous(sec.axis = dup_axis()) +
     # Legend
     scale_fill_manual(name="Food group", values=food_group_colors) +
+    scale_color_manual(name="Food group", values=food_group_colors) +
     # Theme
     theme_bw() + base_theme +
     theme(legend.position = "none")

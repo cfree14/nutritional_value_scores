@@ -248,6 +248,7 @@ server <- function(input, output, session){
   output$plot_lca_catg <- renderPlot({
     g <- plot_lca(data = lca,
                   country=input$country2,
+                  type="catg",
                   factor=input$tabs3,
                   group = input$group_yn2,
                   base_theme=base_theme)
@@ -258,6 +259,7 @@ server <- function(input, output, session){
   output$plot_lca_stage <- renderPlot({
     g <- plot_lca(data = lca,
                   country=input$country2,
+                  type="stage",
                   factor=input$tabs4,
                   group = input$group_yn3,
                   base_theme=base_theme)
