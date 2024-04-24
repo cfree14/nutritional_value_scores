@@ -163,7 +163,7 @@ plot_lca <- function(data, country, type, factor, unit, group_yn, base_theme){
   sdata_kg <- data %>% 
     filter(country==country_do & factor==factor_do & unit=="mPT/kg")
   sdata_nvs <- data %>% 
-    filter(country==country_do & factor==factor_do & unit=="mPT/NVS")
+    filter(country==country_do & factor==factor_do & unit=="mPT/100 NVS")
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
@@ -188,8 +188,8 @@ plot_lca <- function(data, country, type, factor, unit, group_yn, base_theme){
   
   # Plot data
   xtitle2 <- ifelse(factor=="Overall",
-                    paste0("Overall impact (mPT/NVS)"),
-                    paste0("Impact of\n", tolower(factor_do), " (mPT/NVS)"))
+                    paste0("Overall impact (mPT/100 NVS)"),
+                    paste0("Impact of\n", tolower(factor_do), " (mPT/100 NVS)"))
   g2 <- ggplot(sdata_nvs, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
     {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
     geom_bar(stat="identity", alpha=0.7) +

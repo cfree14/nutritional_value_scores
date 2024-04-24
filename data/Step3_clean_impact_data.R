@@ -33,7 +33,9 @@ data <- data_orig %>%
   # Rename
   janitor::clean_names("snake") %>% 
   rename(food_lca=food_lc_aname,
-         food_nvs=food_nv_sname) %>% 
+         food_nvs=food_nv_sname) %>%
+  # Remove green pepper mistake
+  filter(!(food_lca=="Green pepper" & dqq_question=="Q7.2")) %>% 
   # Spread
   # Must remove metric
   select(-metric) %>%
@@ -63,6 +65,17 @@ str(data)
 freeR::complete(data)
 
 
+# Export data
+################################################################################
+
+# Export
+saveRDS(data, file.path(outdir, "envi_impact_data.Rds"))
+
+
+
+
+
+
 # # Format foods
 # mutate(food_long=case_when(country=="Bangladesh" & food_long=="Lean fish, average of various species consumed in Indonesia and of different cooking methods" ~ "Lean fish, average of various species consumed in Bangladesh and of different cooking methods",
 #                            food_lca=="Peanuts (raw/oil-roasted)" ~ "Peanuts, average of raw, oil-roasted",
@@ -73,9 +86,6 @@ freeR::complete(data)
 #                              T ~ food_long)) %>% 
 # mutate(dqq_food_group=ifelse(food_long=="Melons, cantaloupe, raw", "Vitamin A-rich fruits", dqq_food_group)) %>% 
 
-# Export data
-################################################################################
 
-# Export
-saveRDS(data, file.path(outdir, "envi_impact_data.Rds"))
+
 
