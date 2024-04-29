@@ -106,7 +106,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     h4("Scores by food group"),
     
     # Plot boxplot
-    p("The figure below illustrates the distribution of Nutritional Value Scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+    p("The figure below illustrates the distribution of Nutritional Value Scores and the seven sub-scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
     
     # Score panels
     tabsetPanel(id= "tabs1",
@@ -126,8 +126,8 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     
     # Detailed results
     h4("Scores by individual foods"),
-    p("The figure below illustrates Nutritional Value Scores of specific recommended foods within the Diet Quality Questionnaire. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
-    p("Ultra-processed foods and culinary ingredients are currently excluded from the NVS. Future versions may include these items."),
+    p("The figure below illustrates Nutritional Value Scores of unprocessed, minimally and moderately processed foods included in country-adapted Diet Quality Questionnaires (DQQ). Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+    p("The reason for selecting foods from Diet Quality Questionnaires is to ensure relevance to the local context, as DQQ foods are commonly consumed by a large proportion of households locally. In addition, we have chosen not to prioritize analyzing ultra-processed foods as these are usually not recommended in dietary guidelines globally, and the purpose of the NVS is to inform policy and programmatic decisions around nutritious foods to promote or invest in. However, future versions of the NVS may be expanded to allow for scoring ultra-processed foods and culinary ingredients."),
     br(),
     
     # Group?
@@ -175,7 +175,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
            
     # Life stage
     h4("Impact by category"),
-    p("Figure text."),
+    p("The figure below illustrates the overall environmental impact and the impact by category of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of impacts of the different categories."),
     shinyWidgets::radioGroupButtons(inputId="group_yn2", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
     
     # Category panels
@@ -195,7 +195,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
            
     # Life stage
     h4("Impact by life stage"),
-    p("Figure text."),
+    p("The figure below illustrates the overall environmental impact and the impact by life stage of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of impacts of each life stage. Lines indicate the 95% confidence interval."),
     shinyWidgets::radioGroupButtons(inputId="group_yn3", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
     
     # Life stage panels
