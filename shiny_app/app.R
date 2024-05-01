@@ -172,6 +172,12 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
      selectInput(inputId = "country2", label = "Select a country:",
                  choices = countries,  multiple = F, selected=countries[1]),
      br(),
+     
+     # Life stage
+     h4("Broad results"),
+     p("Insert text here."),
+     shinyWidgets::radioGroupButtons(inputId="units_lca", label="Units?", choices=c("mPT/kg", "mPT/100 NVS"), selected="mPT/kg"), 
+     plotOutput(outputId = "plot_lca_rasters", width=700, height=1100),
            
     # Life stage
     h4("Impact by category"),
@@ -181,6 +187,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     # Category panels
     tabsetPanel(id= "tabs3",
                 tabPanel("Overall"),
+                tabPanel("Climate change"),
                 tabPanel("Acidification"),
                 tabPanel("Particulate matter"),
                 tabPanel("Eutrophication"),
@@ -190,8 +197,11 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
                 tabPanel("Other")
     ),
     
-    # Plot LCA by category
-    plotOutput(outputId = "plot_lca_catg", width=1100, height=1000),
+    # Plot LCA by category - broad
+    plotOutput(outputId = "plot_lca_boxplot_catg", width=700, height=800),
+    
+    # Plot LCA by category - detailed
+    plotOutput(outputId = "plot_lca_catg", width=1100, height=1100),
            
     # Life stage
     h4("Impact by life stage"),
@@ -207,12 +217,14 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
                 tabPanel("Distribution"),
                 tabPanel("Retail"),
                 tabPanel("User stage"),
-                tabPanel("Water treatment"),
-                tabPanel("Climate change")
+                tabPanel("Water treatment")
     ),
     
-    # Plot LCA by life stage
-    plotOutput(outputId = "plot_lca_stage", width=1100, height=1000),
+    # Plot LCA by life stage - broad
+    plotOutput(outputId = "plot_lca_boxplot_stage", width=700, height=800),
+    
+    # Plot LCA by life stage- detailed
+    plotOutput(outputId = "plot_lca_stage", width=1100, height=1100),
     
   )
   
@@ -244,7 +256,18 @@ server <- function(input, output, session){
     g
   })
   
-  # Plot LCA by category
+  
+  # Plot LCA by categogy - broad
+  output$plot_lca_boxplot_catg <- renderPlot({
+    g <- plot_lca_boxplot(data = lca,
+                          country=input$country2,
+                          type="catg",
+                          factor=input$tabs3,
+                          base_theme=base_theme)
+    g
+  })
+  
+  # Plot LCA by category - detailed
   output$plot_lca_catg <- renderPlot({
     g <- plot_lca(data = lca,
                   country=input$country2,
@@ -263,6 +286,25 @@ server <- function(input, output, session){
                   factor=input$tabs4,
                   group = input$group_yn3,
                   base_theme=base_theme)
+    g
+  })
+  
+  # Plot LCA by life stage - broad
+  output$plot_lca_boxplot_stage <- renderPlot({
+    g <- plot_lca_boxplot(data = lca,
+                          country=input$country2,
+                          type="stage",
+                          factor=input$tabs3,
+                          base_theme=base_theme)
+    g
+  })
+  
+  # Plot LCA rasters
+  output$plot_lca_rasters <- renderPlot({
+    g <- plot_lca_rasters(data = lca,
+                          country=input$country2,
+                          unit=input$units_lca, 
+                          base_theme=base_theme)
     g
   })
 

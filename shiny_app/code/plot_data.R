@@ -210,7 +210,7 @@ plot_lca <- function(data, country, type, factor, unit, group_yn, base_theme){
   
 }
 
-# 
+# Plot LCA barplots
 plot_lca_overall <- function(data, country, type, factor, unit, group_yn, base_theme){
   
   # Params
@@ -272,8 +272,151 @@ plot_lca_overall <- function(data, country, type, factor, unit, group_yn, base_t
   
 }
 
+# Plot LCA rasters
+# data <- lca; country <- "Indonesia"; unit <- "mPT/kg"; 
+plot_lca_rasters <- function(data, country, unit, base_theme){
+  
+  # Subset data
+  cntry_do <- country
+  unit_do <- unit
+  sdata <- data %>% 
+    filter(country==cntry_do & unit==unit_do) %>% 
+    mutate(food_group=recode(food_group,
+                                    "Legumes, nuts, seeds"="Legumes,\nnuts,\nseeds"))
+  
+  # Food order
+  stats_food <- sdata %>% 
+    group_by(food_group, food_lca) %>% 
+    summarize(value_sum=sum(value)) %>% 
+    ungroup() %>% 
+    arrange(food_group, desc(value_sum))
+  
+  # Factor order
+  stats_factor <- sdata %>% 
+    group_by(category, factor) %>% 
+    summarize(value_sum=sum(value)) %>% 
+    ungroup %>% 
+    arrange(category, desc(value_sum))
+  
+  # Order data
+  data_ordered <- sdata %>% 
+    mutate(food_lca=factor(food_lca, levels=stats_food$food_lca)) %>% 
+    mutate(factor=factor(factor, levels=stats_factor$factor))
+  
+  # Overwrite zeros/negatives
+  data_ordered1 <- data_ordered %>% 
+    mutate(value=ifelse(value<=0, NA, value))
+  
+  # Plot data
+  ################################################################################
+  
+  # Plopt data
+  legend_title <- paste0("Environmental impact\n(", unit_do, ")")
+  g <- ggplot(data_ordered1, 
+              aes(y=food_lca, x=factor, fill=value)) +
+    facet_grid(food_group~category, scales="free", space="free") +
+    # Data
+    geom_tile() +
+    # Labels
+    labs(x="", y="") +
+    # Legend
+    scale_fill_gradientn(name=legend_title,
+                         colors=RColorBrewer::brewer.pal(9, "Spectral") %>% rev(),
+                         na.value="white",
+                         trans="log2",
+                         breaks=c(0.0001, 0.001, 0.01, 0.1, 1),
+                         labels=c("0.0001", "0.001", "0.01", "0.1", "1")) +
+    guides(fill = guide_colorbar(ticks.colour = "black", frame.colour = "black")) +
+    # Theme
+    theme_bw() + base_theme +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  g
+  
+}
 
-
+#  data <- lca; country <- "Indonesia";  factor <- "Climate change"
+plot_lca_boxplot <- function(data, country, type, factor, base_theme){
+  
+  # Food groups
+  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+  
+  # Format data
+  ################################################################################
+  
+  # Format data
+  country_do <- country
+  if(factor=="Overall"){
+    factor_do <- ifelse(type=="stage", "Total life cycle", "Total category impact")
+  }else{
+    factor_do <- factor
+    
+  }
+  sdata <- data %>% 
+    # Subset
+    filter(country==country_do & factor==factor_do)
+  
+  # Split data
+  sdata1 <- sdata %>% 
+    filter(unit=="mPT/kg")
+  sdata2 <- sdata %>% 
+    filter(unit=="mPT/100 NVS")
+  
+  # Order
+  stats1 <- sdata1 %>% 
+    group_by(food_group, dqq_food_group) %>% 
+    summarize(value=mean(value)) %>% 
+    ungroup() %>% 
+    arrange(desc(value))
+  stats2 <- sdata2 %>% 
+    group_by(food_group, dqq_food_group) %>% 
+    summarize(value=mean(value)) %>% 
+    ungroup() %>% 
+    arrange(desc(value))
+  
+  # Order data
+  sdata1_ordered <- sdata1 %>% 
+    mutate(dqq_food_group=factor(dqq_food_group, levels=stats1$dqq_food_group))
+  sdata2_ordered <- sdata2 %>% 
+    mutate(dqq_food_group=factor(dqq_food_group, levels=stats2$dqq_food_group))
+  
+  
+  # Plot data
+  ################################################################################
+  
+  # Plot data
+  xtitle1 <- paste0(factor, " impact (mPT/kg)")
+  g1 <- ggplot(sdata1_ordered, aes(y=dqq_food_group, x=value, fill=food_group)) +
+    geom_boxplot() +
+    geom_point(data=stats1, mapping=aes(y=dqq_food_group, x=value, fill=food_group), pch=21, size=2) +
+    # Labels
+    labs(x=xtitle1, y="", tag="A") +
+    # Legend
+    scale_fill_manual(name="Food group", values=food_group_colors) +
+    # Theme
+    theme_bw() + base_theme +
+    theme(legend.position = c(0.8, 0.75))
+  g1 
+  
+  # Plot data
+  xtitle2 <- paste0(factor, " impact (mPT/kg)")
+  g2 <- ggplot(sdata2_ordered, aes(y=dqq_food_group, x=value, fill=food_group)) +
+    geom_boxplot() +
+    geom_point(data=stats2, mapping=aes(y=dqq_food_group, x=value, fill=food_group), pch=21, size=2) +
+    # Labels
+    labs(x=xtitle2, y="", tag="B") +
+    # Legend
+    scale_fill_manual(name="Food group", values=food_group_colors) +
+    # Theme
+    theme_bw() + base_theme +
+    theme(legend.position = "none")
+  g2
+  
+  # Merge
+  g <- gridExtra::grid.arrange(g1, g2, ncol=1)
+  g
+  
+  
+}
 
 
 

@@ -34,6 +34,11 @@ data <- data_orig %>%
   janitor::clean_names("snake") %>% 
   rename(food_lca=food_lc_aname,
          food_nvs=food_nv_sname) %>%
+  # Fix a few foods
+  mutate(food_lca=case_when(country=="Bangladesh" & food_lca=="Lean fish" ~ "Lean fish (tilapia)",
+                            country=="Bangladesh" & food_lca=="Fatty fish" ~ "Fatty fish (herring)",
+                            country=="Bangladesh" & food_lca=="Dried fish" ~ "Dried fish (herring)",
+                            T ~ food_lca)) %>% 
   # Remove green pepper mistake
   filter(!(food_lca=="Green pepper" & dqq_question=="Q7.2")) %>% 
   # Spread
