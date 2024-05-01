@@ -1,7 +1,7 @@
 
-# Plot overall
+# Plot NVS barplots
 # country <- "Indonesia"; data <- scores; score_name <- "Overall"
-plot_overall <- function(data, score_name, group_yn, country, base_theme){
+plot_nvs_barplots <- function(data, score_name, group_yn, country, base_theme){
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
@@ -81,9 +81,9 @@ plot_overall <- function(data, score_name, group_yn, country, base_theme){
 
 
 
-# Plot boxplots
+# Plot NVS boxplots
 # country <- "Indonesia"; data <- scores; score_name <- "NVS"
-plot_boxplot <- function(data, country, score_name, base_theme){
+plot_nvs_boxplots <- function(data, country, score_name, base_theme){
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
@@ -91,7 +91,7 @@ plot_boxplot <- function(data, country, score_name, base_theme){
   # Format data
   country_do <- country
   sdata <- data %>% 
-    filter(country==country_do)
+    filter(country %in% country_do)
   sdata_long <- sdata %>% 
     gather(key="metric", value="score", 5:ncol(.)) %>% 
     mutate(metric=recode_factor(metric, 
