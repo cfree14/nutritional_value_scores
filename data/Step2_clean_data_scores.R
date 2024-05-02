@@ -15,6 +15,7 @@ outdir <- "data/processed"
 
 # Read data
 data_orig <- readxl::read_excel(file.path(indir, "NVS_4Mar2024.xlsx"))
+nigeria_orig <- read.csv(file.path(indir, "NVS_Nigeria_12Apr2024.csv"))
 
 # Read food key
 food_key <- readRDS(file.path(outdir, "food_key.Rds"))

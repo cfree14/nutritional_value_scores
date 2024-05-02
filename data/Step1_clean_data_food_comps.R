@@ -15,15 +15,21 @@ outdir <- "data/processed"
 
 # Read data
 data_orig <- read.csv(file.path(indir, "FCD_4Mar2024.csv"), na.strings=c("", "N/A"))
+nigeria_orig <- read.csv(file.path(indir, "FCD_Nigeria_12Apr2024.csv"), na.strings=c("", "N/A"))
+
+# Inspect
+str(data_orig)
+str(nigeria_orig)
+colnames(nigeria_orig)[!colnames(nigeria_orig) %in% colnames(data_orig)]
+
 
 # Food id issues to clean up
-
 
 # Format data
 ################################################################################
 
 # Format data
-data <- data_orig %>% 
+data <- bind_rows(data_orig) %>% 
   # Rename
   janitor::clean_names("snake") %>% 
   # Format long foods

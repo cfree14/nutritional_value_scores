@@ -144,7 +144,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     br(),
     
     # Group?
-    shinyWidgets::radioGroupButtons(inputId="group_yn", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
+    shinyWidgets::radioGroupButtons(inputId="group_yn1", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
     
     # Score panels
     tabsetPanel(id= "tabs2",
@@ -184,7 +184,6 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
            
      # Select country
      h3("Data explorer"),
-     p("Select a country to begin data exploration."),
      selectInput(inputId = "country3", label = "Select a country:",
                  choices = countries,  multiple = F, selected=countries[1]),
      br(),
@@ -215,7 +214,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     ),
     
     # Plot LCA by category - broad
-    plotOutput(outputId = "plot_lca_boxplot_catg", width=700, height=800),
+    plotOutput(outputId = "plot_lca_boxplots_catg", width=700, height=800),
     
     # Detailed results figure
     p("The figure below illustrates the overall environmental impact and the impact by category of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of impacts of the different categories."),
@@ -237,7 +236,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     ),
     
     # Plot LCA by category - detailed
-    plotOutput(outputId = "plot_lca_catg", width=1100, height=1100),
+    plotOutput(outputId = "plot_lca_barplots_catg", width=1100, height=1100),
            
     # Life stage
     h4("Impact by life stage"),
@@ -258,7 +257,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     ),
     
     # Plot LCA by life stage - broad
-    plotOutput(outputId = "plot_lca_boxplot_stage", width=700, height=800),
+    plotOutput(outputId = "plot_lca_boxplots_stage", width=700, height=800),
     
     # Detailed results figure
     p("The figure below illustrates the overall environmental impact and the impact by life stage of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of impacts of each life stage. Lines indicate the 95% confidence interval."),
@@ -279,7 +278,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
     ),
     
     # Plot LCA by life stage- detailed
-    plotOutput(outputId = "plot_lca_stage", width=1100, height=1100),
+    plotOutput(outputId = "plot_lca_barplots_stage", width=1100, height=1100),
     
     # Citation
     h3("Citation"),
@@ -316,7 +315,7 @@ server <- function(input, output, session){
   output$plot_nvs_barplots <- renderPlot({
     g <- plot_nvs_barplots(data = scores,
                       score = input$tabs2,
-                      group = input$group_yn,
+                      group = input$group_yn1,
                       country=input$country2,
                       base_theme=base_theme)
     g
@@ -335,8 +334,8 @@ server <- function(input, output, session){
   })
   
   # Plot LCA by category - broad
-  output$plot_lca_boxplot_catg <- renderPlot({
-    g <- plot_lca_boxplot(data = lca,
+  output$plot_lca_boxplots_catg <- renderPlot({
+    g <- plot_lca_boxplots(data = lca,
                           country=input$country3,
                           type="catg",
                           factor=input$tabs3,
@@ -345,19 +344,19 @@ server <- function(input, output, session){
   })
   
   # Plot LCA by category - detailed
-  output$plot_lca_catg <- renderPlot({
-    g <- plot_lca(data = lca,
-                  country=input$country3,
-                  type="catg",
-                  factor=input$tabs4,
-                  group = input$group_yn2,
-                  base_theme=base_theme)
+  output$plot_lca_barplots_catg <- renderPlot({
+    g <- plot_lca_barplots(data = lca,
+                          country=input$country3,
+                          type="catg",
+                          factor=input$tabs4,
+                          group = input$group_yn2,
+                          base_theme=base_theme)
     g
   })
   
   # Plot LCA by life stage - broad
-  output$plot_lca_boxplot_stage <- renderPlot({
-    g <- plot_lca_boxplot(data = lca,
+  output$plot_lca_boxplots_stage <- renderPlot({
+    g <- plot_lca_boxplots(data = lca,
                           country=input$country3,
                           type="stage",
                           factor=input$tabs5,
@@ -366,13 +365,13 @@ server <- function(input, output, session){
   })
   
   # Plot LCA by life stage - detailed
-  output$plot_lca_stage <- renderPlot({
-    g <- plot_lca(data = lca,
-                  country=input$country3,
-                  type="stage",
-                  factor=input$tabs6,
-                  group = input$group_yn3,
-                  base_theme=base_theme)
+  output$plot_lca_barplots_stage <- renderPlot({
+    g <- plot_lca_barplots(data = lca,
+                            country=input$country3,
+                            type="stage",
+                            factor=input$tabs6,
+                            group = input$group_yn3,
+                            base_theme=base_theme)
     g
   })
 

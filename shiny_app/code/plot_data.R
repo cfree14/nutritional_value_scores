@@ -148,7 +148,7 @@ plot_nvs_boxplots <- function(data, country, score_name, base_theme){
 
 # Plot LCA data
 # data <- lca_orig; country <- "Indonesia"; type <- "stage"; unit <- "mPT/kg"; factor <- "Overall"; group_yn <- "Yes"
-plot_lca <- function(data, country, type, factor, unit, group_yn, base_theme){
+plot_lca_barplots <- function(data, country, type, factor, unit, group_yn, base_theme){
   
   # Params
   country_do <- country
@@ -185,68 +185,6 @@ plot_lca <- function(data, country, type, factor, unit, group_yn, base_theme){
     # Theme
     theme_bw() + base_theme +
     theme(legend.position = "none")
-  
-  # Plot data
-  xtitle2 <- ifelse(factor=="Overall",
-                    paste0("Overall impact (mPT/100 NVS)"),
-                    paste0("Impact of\n", tolower(factor_do), " (mPT/100 NVS)"))
-  g2 <- ggplot(sdata_nvs, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
-    {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
-    geom_bar(stat="identity", alpha=0.7) +
-    geom_errorbar(mapping=aes(y=food_lca, xmin=value_lo, xmax=value_hi, color=food_group), linewidth=1, width=0) +
-    # Labels
-    labs(x=xtitle2, y="") +
-    scale_x_continuous(sec.axis = dup_axis()) +
-    # Legend
-    scale_fill_manual(name="Food group", values=food_group_colors) +
-    scale_color_manual(name="Food group", values=food_group_colors) +
-    # Theme
-    theme_bw() + base_theme +
-    theme(legend.position = "none")
-  
-  # Merge
-  g <- gridExtra::grid.arrange(g1, g2, ncol=2)
-  g
-  
-}
-
-# Plot LCA barplots
-plot_lca_overall <- function(data, country, type, factor, unit, group_yn, base_theme){
-  
-  # Params
-  country_do <- country
-  factor_do <- factor
-  
-  # Factor
-  if(factor_do=="Overall"){
-    factor_do <-ifelse(type=="catg", "Total category impact", "Total life cycle")
-    catg_do <- ifelse(type=="catg", "Impact category", "Life stage")
-  }
-  
-  # Format data
-  sdata_kg <- data %>% 
-    filter(country==country_do & category==catg_do & factor!=factor_do & unit=="mPT/kg")
-  sdata_nvs <- data %>% 
-    filter(country==country_do & category==catg_do & factor!=factor_do & unit=="mPT/100 NVS")
-  
-  # Plot data
-  xtitle1 <- ifelse(factor=="Overall",
-                    paste0("Overall impact (mPT/kg)"),
-                    paste0("Impact of\n", tolower(factor_do), " (mPT/kg)"))
-  g1 <- ggplot(sdata_kg, aes(y=food_lca, x=value, fill=factor)) +
-    {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
-    geom_bar(stat="identity", alpha=0.7) +
-    # geom_errorbar(mapping=aes(y=food_lca, xmin=value_lo, xmax=value_hi, color=food_group), linewidth=1, width=0) +
-    # Labels
-    labs(x=xtitle1, y="") +
-    scale_x_continuous(sec.axis = dup_axis()) +
-    # Legend
-    # scale_fill_manual(name="Food group", values=food_group_colors) +
-    # scale_color_manual(name="Food group", values=food_group_colors) +
-    # Theme
-    theme_bw() + base_theme +
-    theme(legend.position = "none")
-  g1
   
   # Plot data
   xtitle2 <- ifelse(factor=="Overall",
@@ -335,7 +273,7 @@ plot_lca_rasters <- function(data, country, unit, base_theme){
 }
 
 #  data <- lca; country <- "Indonesia";  factor <- "Climate change"
-plot_lca_boxplot <- function(data, country, type, factor, base_theme){
+plot_lca_boxplots <- function(data, country, type, factor, base_theme){
   
   # Food groups
   food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
@@ -386,10 +324,11 @@ plot_lca_boxplot <- function(data, country, type, factor, base_theme){
   # Plot data
   xtitle1 <- paste0(factor, " impact (mPT/kg)")
   g1 <- ggplot(sdata1_ordered, aes(y=dqq_food_group, x=value, fill=food_group)) +
+    stat_boxplot(geom = "errorbar", width = 0.4) + 
     geom_boxplot() +
-    geom_point(data=stats1, mapping=aes(y=dqq_food_group, x=value, fill=food_group), pch=21, size=2) +
+    geom_point(data=stats1, mapping=aes(y=dqq_food_group, x=value, fill=food_group), pch=21, size=3) +
     # Labels
-    labs(x=xtitle1, y="", tag="A") +
+    labs(x=xtitle1, y="") +
     # Legend
     scale_fill_manual(name="Food group", values=food_group_colors) +
     # Theme
@@ -400,10 +339,11 @@ plot_lca_boxplot <- function(data, country, type, factor, base_theme){
   # Plot data
   xtitle2 <- paste0(factor, " impact (mPT/kg)")
   g2 <- ggplot(sdata2_ordered, aes(y=dqq_food_group, x=value, fill=food_group)) +
+    stat_boxplot(geom = "errorbar", width = 0.4) + 
     geom_boxplot() +
-    geom_point(data=stats2, mapping=aes(y=dqq_food_group, x=value, fill=food_group), pch=21, size=2) +
+    geom_point(data=stats2, mapping=aes(y=dqq_food_group, x=value, fill=food_group), pch=21, size=3) +
     # Labels
-    labs(x=xtitle2, y="", tag="B") +
+    labs(x=xtitle2, y="") +
     # Legend
     scale_fill_manual(name="Food group", values=food_group_colors) +
     # Theme
