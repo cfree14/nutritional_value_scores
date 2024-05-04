@@ -26,6 +26,11 @@ food_key <- readRDS(file.path(outdir, "food_key.Rds"))
 
 # Format data
 data <- data_orig %>% 
+  # Dupplicate total CI columns
+  mutate(TOTAL_categories_2.5_mPt_kg=TOTAL_lifecycle_2.5_mPt_kg,
+         TOTAL_categories_97.5_mPt_kg=TOTAL_lifecycle_97.5_mPt_kg,
+         TOTAL_categories_2.5_mPt_100NVS=TOTAL_lifecycle_2.5_mPt_100NVS,
+         TOTAL_categories_97.5_mPt_100NVS=TOTAL_lifecycle_97.5_mPt_100NVS) %>% 
   # Gather
   gather(key="metric", value="value", 8:ncol(.)) %>% 
   # Add variable metrics
@@ -41,6 +46,8 @@ data <- data_orig %>%
                             T ~ food_lca)) %>% 
   # Remove green pepper mistake
   filter(!(food_lca=="Green pepper" & dqq_question=="Q7.2")) %>% 
+  # Remove a few other foods b/c Flaminia said so
+  filter(!(country=="Bangladesh" & food_lca %in% c("Peanuts", "Egg, omelet"))) %>% 
   # Spread
   # Must remove metric
   select(-metric) %>%
@@ -69,15 +76,11 @@ freeR::which_duplicated(food_key$food_long)
 str(data)
 freeR::complete(data)
 
-
 # Export data
 ################################################################################
 
 # Export
 saveRDS(data, file.path(outdir, "envi_impact_data.Rds"))
-
-
-
 
 
 
@@ -90,7 +93,4 @@ saveRDS(data, file.path(outdir, "envi_impact_data.Rds"))
 #                            food_lca=="Whole sheep milk" ~ "Milk, sheep, fluid, whole, unenriched", 
 #                              T ~ food_long)) %>% 
 # mutate(dqq_food_group=ifelse(food_long=="Melons, cantaloupe, raw", "Vitamin A-rich fruits", dqq_food_group)) %>% 
-
-
-
 

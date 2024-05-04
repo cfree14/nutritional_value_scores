@@ -85,7 +85,7 @@ base_theme <- theme(axis.text=element_text(size=12),
 ################################################################################
 
 # User interface
-ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
+ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
                  
   # Nutritional value tab
   ##############################################################################
@@ -190,7 +190,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
      
      # Life stage
      h4("Environmental impacts"),
-     p("Insert text here."),
+     p("The figure below illustrates the environmental impact of food production by life stage (left panel) and impact category (right panel) for different foods included in country-adapted Diet Quality Questionnaires (DQQ). Foods are listed in order of increasing average environmental impact within each food group. Life stages and impact categories are listed in order of decreasing average environmental impact across all  foods. Cell color indicates environmental impacts and is illustrated using a log-scale. White cells indicate zero environmental impact."),
      shinyWidgets::radioGroupButtons(inputId="units_lca", label="Units?", choices=c("mPT/kg", "mPT/100 NVS"), selected="mPT/kg"), 
      plotOutput(outputId = "plot_lca_rasters", width=700, height=1100),
            
@@ -208,7 +208,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
                 tabPanel("Particulate matter"),
                 tabPanel("Eutrophication"),
                 tabPanel("Land use"),
-                tabPanel("Resource use fossils"),
+                tabPanel("Fossil fuel use"),
                 tabPanel("Water use"),
                 tabPanel("Other")
     ),
@@ -230,7 +230,7 @@ ui <- navbarPage("Nutritional Value Score (NVS) exploration tool",
                 tabPanel("Particulate matter"),
                 tabPanel("Eutrophication"),
                 tabPanel("Land use"),
-                tabPanel("Resource use fossils"),
+                tabPanel("Fossil fuel use"),
                 tabPanel("Water use"),
                 tabPanel("Other")
     ),
