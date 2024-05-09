@@ -14,8 +14,8 @@ indir <- "data/raw"
 outdir <- "data/processed"
 
 # Read data
-data_orig <- readxl::read_excel(file.path(indir, "NVS_4Mar2024.xlsx"))
-nigeria_orig <- read.csv(file.path(indir, "NVS_Nigeria_12Apr2024.csv"))
+# data_orig <- readxl::read_excel(file.path(indir, "NVS_4Mar2024.xlsx"))
+data_orig <- readxl::read_excel(file.path(indir, "NVS_Nigeria_12Apr2024.xlsx"))
 
 # Read food key
 food_key <- readRDS(file.path(outdir, "food_key.Rds"))
@@ -24,22 +24,23 @@ food_key <- readRDS(file.path(outdir, "food_key.Rds"))
 # Format data
 ################################################################################
 
-# Format data
+# Format original data
 data <- data_orig %>% 
+  # Simplify
+  select("Food",	"Country",	"Vitamin score",	"Mineral Score",	"Omega-3 fat score",	
+         "EAA score",	"Fiber score",	"Nutrient ratio score",	"Calorie density score",	"Nutrient density score",	
+         "Nutritional Value Score") %>% 
   # Rename
-  # NOTE: EAA AND OMEGA-3 ARE MISLABELLED AND CORRECTED HERE
   janitor::clean_names("snake") %>% 
   rename(vitamin=vitamin_score,
          mineral=mineral_score,
-         omega3=eaa_score, # mislabeled
-         eaa=omega_3_fat_score, # mislabeled
+         omega3=omega_3_fat_score,
+         eaa=eaa_score,
          fiber=fiber_score,
          nutrient_ratio=nutrient_ratio_score,
          calorie_density=calorie_density_score,
          nutrient_density=nutrient_density_score,
          overall=nutritional_value_score) %>% 
-  # Recode green pepper (random guess)
-  mutate(food=ifelse(country=="Indonesia" & food=="Green pepper" & overall==48, "Green pepper (chayote)", food)) %>% 
   # Add food groups
   left_join(food_key %>% select(food, food_group, dqq_food_group), by="food") %>% 
   # Arrange

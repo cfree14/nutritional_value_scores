@@ -60,8 +60,8 @@ lca <- lca_orig %>%
          food_group=factor(food_group, levels=food_groups))
 
 # Countries
-countries <- scores$country %>% unique()
-
+countries1 <- scores$country %>% unique() %>% sort()
+countries2 <- lca$country %>% unique() %>% sort()
 
 # Themes
 ################################################################################
@@ -111,7 +111,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
     # selectInput(inputId = "country1", label = "Select a country:",
     #             choices = countries,  multiple = F, selected=countries[1]),
     shinyWidgets::pickerInput(inputId="country1", label="Select a country or countries:", 
-                              choices=countries, multiple = T, selected=countries[1],
+                              choices=countries1, multiple = T, selected=countries1[1],
                               options = list(`actions-box` = TRUE)),
 
     br(),
@@ -140,7 +140,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
     
     # Select country
     selectInput(inputId = "country2", label = "Select a country:",
-                choices = countries,  multiple = F, selected=countries[1]),
+                choices = countries1,  multiple = F, selected=countries1[1]),
     br(),
     
     # Group?
@@ -185,7 +185,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
      # Select country
      h3("Data explorer"),
      selectInput(inputId = "country3", label = "Select a country:",
-                 choices = countries,  multiple = F, selected=countries[1]),
+                 choices = countries2,  multiple = F, selected=countries2[1]),
      br(),
      
      # Life stage
