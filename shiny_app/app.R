@@ -57,7 +57,10 @@ lca <- lca_orig %>%
   # Format food group
   mutate(food_group=recode(food_group,
                            "Pulses, nuts, and seeds"="Legumes, nuts, seeds"),
-         food_group=factor(food_group, levels=food_groups))
+         food_group=factor(food_group, levels=food_groups)) %>% 
+  # Format factor
+  mutate(factor=recode(factor,
+                       "Water treatment"="Waste treatment"))
 
 # Countries
 countries1 <- scores$country %>% unique() %>% sort()
@@ -190,7 +193,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
      
      # Life stage
      h4("Environmental impacts"),
-     p("The figure below illustrates the environmental impact of food production by life stage (left panel) and impact category (right panel) for different foods included in country-adapted Diet Quality Questionnaires (DQQ). Foods are listed in order of increasing average environmental impact within each food group. Life stages and impact categories are listed in order of decreasing average environmental impact across all  foods. Cell color indicates environmental impacts and is illustrated using a log-scale. White cells indicate zero environmental impact."),
+     p("The figure below illustrates the environmental impacts associated with the production and consumption of different foods included in country-adapted Diet Quality Questionnaires (DQQ), by life cycle stage (right panel) and impact category (left panel). Foods are listed in order of increasing average environmental impact within each food group. Impacts are measured in both milliPoints per kilogram (mPT/kg) and per a Nutritional Value Score of 100 (mPT/100 NVS). Cell color indicates the intensity of environmental impacts and is illustrated using a log-scale. White cells indicate insignificant environmental impact."),
      shinyWidgets::radioGroupButtons(inputId="units_lca", label="Units?", choices=c("mPT/kg", "mPT/100 NVS"), selected="mPT/kg"), 
      plotOutput(outputId = "plot_lca_rasters", width=700, height=1100),
            
@@ -198,7 +201,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
     h4("Impact by category"),
     
     # Broad results figure
-    p("The figure below illustrates the overall environmental impact and the impact by category of different food groups included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Food groups are sorted in order of decreasing mean environmental impact. The overall impact is the sum of impacts of the different categories. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value."),
+    p("The figure below illustrates the overall environmental impact and the impact by category of different food groups included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both milliPoints per kilogram (mPT/kg) and per a Nutritional Value Score of 100 (mPT/100 NVS). Food groups are sorted in order of increasing mean environmental impact. The overall impact is the sum of the impacts of all individual categories. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value."),
 
     # Category panels
     tabsetPanel(id= "tabs3",
@@ -217,7 +220,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
     plotOutput(outputId = "plot_lca_boxplots_catg", width=700, height=800),
     
     # Detailed results figure
-    p("The figure below illustrates the overall environmental impact and the impact by category of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of impacts of the different categories."),
+    p("The figure below illustrates the overall environmental impact and the impact by category of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both milliPoints per kilogram (mPT/kg) and per a Nutritional Value Score of 100 (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of the impacts of all individual categories. Lines indicate the 95% confidence interval."),
     
     # Group results?
     shinyWidgets::radioGroupButtons(inputId="group_yn2", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
@@ -242,7 +245,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
     h4("Impact by life stage"),
     
     # Broad figure
-    p("The figure below illustrates the overall environmental impact and the impact by life stage of different food groups included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Food groups are sorted in order of decreasing mean environmental impact. The overall impact is the sum of impacts of the different categories. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. "),
+    p("The figure below illustrates the overall environmental impact and the impact by life cycle stage of different food groups included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both milliPoints per kilogram (mPT/kg) and per a Nutritional Value Score of 100 (mPT/100 NVS). Food groups are sorted in order of increasing mean environmental impact. The overall impact is the sum of the impacts associated with all life cycle stages. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value."),
     
     # Life stage panels
     tabsetPanel(id= "tabs5",
@@ -253,14 +256,14 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
                 tabPanel("Distribution"),
                 tabPanel("Retail"),
                 tabPanel("User stage"),
-                tabPanel("Water treatment")
+                tabPanel("Waste treatment")
     ),
     
     # Plot LCA by life stage - broad
     plotOutput(outputId = "plot_lca_boxplots_stage", width=700, height=800),
     
     # Detailed results figure
-    p("The figure below illustrates the overall environmental impact and the impact by life stage of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both millipoints per kilogram (mPT/kg) and per 100 Nutritional Value Score points (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of impacts of each life stage. Lines indicate the 95% confidence interval."),
+    p("The figure below illustrates the overall environmental impact and the impact by life cycle stage of different foods included in country-adapted Diet Quality Questionnaires (DQQ). Impacts are measured in both milliPoints per kilogram (mPT/kg) and per a Nutritional Value Score of 100 (mPT/100 NVS). Foods are sorted in order of decreasing environmental impacts. The overall impact is the sum of the impacts associated with all life stages. Lines indicate the 95% confidence interval."),
     
     # Group results?
     shinyWidgets::radioGroupButtons(inputId="group_yn3", label="Group results by food group?", choices=c("Yes", "No"), selected="Yes"), 
@@ -274,7 +277,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
                 tabPanel("Distribution"),
                 tabPanel("Retail"),
                 tabPanel("User stage"),
-                tabPanel("Water treatment")
+                tabPanel("Waste treatment")
     ),
     
     # Plot LCA by life stage- detailed

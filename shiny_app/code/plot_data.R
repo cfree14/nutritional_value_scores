@@ -237,9 +237,16 @@ plot_lca_rasters <- function(data, country, unit, base_theme){
     arrange(category, desc(value_sum))
   
   # Order data
+  catgs <- c("Total category impact", "Climate change",  "Acidification", "Particulate matter", 
+             "Eutrophication", "Land use",  "Fossil fuel use", "Water use", "Other")
+  stages <- c("Total life cycle", "Primary production", "Processing", "Packaging", "Distribution", "Retail", "User stage", "Waste treatment")
+  factors <- c(catgs, stages)
   data_ordered <- sdata %>% 
+    # Order foods
     mutate(food_lca=factor(food_lca, levels=stats_food$food_lca)) %>% 
-    mutate(factor=factor(factor, levels=stats_factor$factor))
+    # Order factors 
+    # mutate(factor=factor(factor, levels=stats_factor$factor)) # by intensity
+    mutate(factor=factor(factor, levels=factors)) # by fixed order
   
   # Overwrite zeros/negatives
   data_ordered1 <- data_ordered %>% 
@@ -337,7 +344,7 @@ plot_lca_boxplots <- function(data, country, type, factor, base_theme){
   g1 
   
   # Plot data
-  xtitle2 <- paste0(factor, " impact (mPT/kg)")
+  xtitle2 <- paste0(factor, " impact (mPT/100 NVS)")
   g2 <- ggplot(sdata2_ordered, aes(y=dqq_food_group, x=value, fill=food_group)) +
     stat_boxplot(geom = "errorbar", width = 0.4) + 
     geom_boxplot() +
