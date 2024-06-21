@@ -286,7 +286,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
     # Citation
     h3("Citation"),
     p("Please cite this Shiny app and its results using the following paper:"),
-    HTML('<p><span style="font-weight: 400;">Beal T, Ortenzi F (</span><em><span style="font-weight: 400;">in review</span></em><span style="font-weight: 400;">) Nutritional Value Score rates foods based on global health priorities. Available at: </span><a href="https://www.researchsquare.com/article/rs-3443927/v1"><span style="font-weight: 400;">https://www.researchsquare.com/article/rs-3443927/v1</span> </a></p>'),
+    HTML('<p><span style="font-weight: 400;">McLaren S, </span><span style="font-weight: 400;">Ponsioen</span><span style="font-weight: 400;"> T, et al. (</span><em><span style="font-weight: 400;">under development</span></em><span style="font-weight: 400;">) Integrated nutrition and environmental impact assessment to support decision-making in Indonesia.</span></p>'),
     br(),
     br(),
     br()
