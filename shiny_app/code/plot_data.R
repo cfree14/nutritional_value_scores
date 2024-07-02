@@ -174,7 +174,7 @@ plot_lca_barplots <- function(data, country, type, factor, unit, group_yn, base_
                     paste0("Impact of\n", tolower(factor_do), " (mPT/kg)"))
   g1 <- ggplot(sdata_kg, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
     {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
-    geom_bar(stat="identity", alpha=0.7) +
+    geom_bar(stat="identity") +
     geom_errorbar(mapping=aes(y=food_lca, xmin=value_lo, xmax=value_hi), linewidth=0.4, width=0.4, color="black") + # color=food_group, linewidth=1, 
     # Labels
     labs(x=xtitle1, y="") +
@@ -192,7 +192,7 @@ plot_lca_barplots <- function(data, country, type, factor, unit, group_yn, base_
                     paste0("Impact of\n", tolower(factor_do), " (mPT/100 NVS)"))
   g2 <- ggplot(sdata_nvs, aes(y=reorder(food_lca, value), x=value, fill=food_group)) +
     {if(group_yn=="Yes"){facet_grid(food_group~., space="free_y", scale="free_y", labeller = label_wrap_gen(10))}} +
-    geom_bar(stat="identity", alpha=0.7) +
+    geom_bar(stat="identity") +
     geom_errorbar(mapping=aes(y=food_lca, xmin=value_lo, xmax=value_hi), linewidth=0.4, width=0.4, color="black") + # color=food_group, linewidth=1, 
     # Labels
     labs(x=xtitle2, y="") +
