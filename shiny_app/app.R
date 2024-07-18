@@ -30,7 +30,8 @@ lca_orig <- readRDS(file.path(datadir, "envi_impact_data.Rds"))
 sapply(list.files(codedir), function(x) source(file.path(codedir, x)))
 
 # Read intro text
-intro_text <- readr::read_file(file=file.path(datadir, "intro_text.txt"))
+intro_text_nvs <- readr::read_file(file=file.path(datadir, "intro_text_nvs.txt"))
+# intro_text_nlca <- readr::read_file(file=file.path(datadir, "intro_text_nlca.txt")) # This hasn't been written yet. Turn on when written.
 
 
 # Format data
@@ -98,7 +99,7 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
   
     # Intro text
     h3("Background"),
-    HTML(intro_text),
+    HTML(intro_text_nvs),
     br(),
   
     # Section header
@@ -182,7 +183,8 @@ ui <- navbarPage("Nutritional Value Score & Life Cycle Assessment Explorer",
            
      # Intro text
      h3("Background"),
-     p("Background text coming soon."),
+     p("Background text coming soon."),  # turn off when written
+     # HTML(intro_text_nlca), # turn on when written
      br(),
            
      # Select country
