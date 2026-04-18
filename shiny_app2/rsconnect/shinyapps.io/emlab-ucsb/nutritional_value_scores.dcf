@@ -1,0 +1,12 @@
+name: nutritional_value_scores
+title: nutritional_value_scores
+username: emlab-ucsb
+account: emlab-ucsb
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17169911
+bundleId: 11871695
+url: https://emlab-ucsb.shinyapps.io/nutritional_value_scores/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
