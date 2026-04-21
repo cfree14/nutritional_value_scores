@@ -169,7 +169,7 @@ ui <- fluidPage(titlePanel("Nutritional Value Score Explorer"),
     # Citation
     h3("Citation"),
     p("Please cite this Shiny app and its results using the following paper:"),
-    HTML('<p><span style="font-weight: 400;">Beal T, Ortenzi F (</span><em><span style="font-weight: 400;">in review</span></em><span style="font-weight: 400;">) Nutritional Value Score rates foods based on global health priorities. Available at: </span><a href="https://www.researchsquare.com/article/rs-3443927/v1"><span style="font-weight: 400;">https://www.researchsquare.com/article/rs-3443927/v1</span> </a></p>'),
+    HTML('<p><span style="font-weight: 400;">Beal, T., &amp; Ortenzi, F. (2026). </span><a href="https://doi.org/10.1016/j.tjnut.2026.101443"><span style="font-weight: 400;">Nutritional Value Score Rates Foods Based on Nutrient Density and Noncommunicable Disease Prevention</span></a><span style="font-weight: 400;">. </span><em><span style="font-weight: 400;">The Journal of Nutrition</span></em><span style="font-weight: 400;">, 101443.</span></p>'),
     br(),
     br(),
     br()

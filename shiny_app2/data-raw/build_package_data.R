@@ -1,11 +1,11 @@
 
 # Directories
 indir <- "data/processed"
-outdir <- "shiny_app/data"
+outdir <- "shiny_app2/data"
 
 # Read data
-food_key <- readRDS(file.path(indir, "food_key.Rds"))
-scores <- readRDS(file.path(indir, "scores.Rds"))
+food_key <- readRDS(file.path(indir, "food_key_new.Rds"))
+scores <- readRDS(file.path(indir, "scores_new.Rds"))
 food_composition_data <- readRDS(file.path(indir, "food_composition_data.Rds"))
 envi_impact_data <- readRDS(file.path(indir, "envi_impact_data.Rds"))
 
