@@ -4,7 +4,7 @@
 plot_nvs_barplots <- function(data, score_name, group_yn, country, base_theme){
   
   # Food groups
-  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e", "#b7c1bd")
 
   # Format data
   country_do <- country
@@ -70,8 +70,8 @@ plot_nvs_barplots <- function(data, score_name, group_yn, country, base_theme){
       labs(x=x_title, y="") +
       scale_x_continuous(sec.axis = dup_axis(), lim=c(NA, xmax)) +
       # Legend
-      scale_fill_manual(name="Food group", values=food_group_colors) +
-      scale_color_manual(name="Food group", values=food_group_colors) +
+      scale_fill_manual(name="Food group", values=food_group_colors, drop=F) +
+      scale_color_manual(name="Food group", values=food_group_colors, drop=F) +
       # Theme
       theme_bw() + base_theme 
     
@@ -86,7 +86,7 @@ plot_nvs_barplots <- function(data, score_name, group_yn, country, base_theme){
 plot_nvs_boxplots <- function(data, country, score_name, base_theme){
   
   # Food groups
-  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e", "#b7c1bd")
   
   # Format data
   country_do <- country
@@ -139,7 +139,7 @@ plot_nvs_boxplots <- function(data, country, score_name, base_theme){
     labs(x=x_title, y="") +
     scale_x_continuous(sec.axis = dup_axis()) +
     # Legend
-    scale_fill_manual(name="Food group", values=food_group_colors) +
+    scale_fill_manual(name="Food group", values=food_group_colors, drop=F) +
     # Theme
     theme_bw() + base_theme
   
@@ -166,7 +166,7 @@ plot_lca_barplots <- function(data, country, type, factor, unit, group_yn, base_
     filter(country==country_do & factor==factor_do & unit=="mPT/100 NVS")
   
   # Food groups
-  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e")
+  food_group_colors <- c("#5d5766", "#6c9a92", "#e7b123", "#b95547", "#c8875e", "#b7c1bd")
   
   # Plot data
   xtitle1 <- ifelse(factor=="Overall",

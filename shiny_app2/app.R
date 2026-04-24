@@ -38,7 +38,7 @@ intro_text_nvs <- readr::read_file(file=file.path(datadir, "intro_text_nvs.txt")
 ################################################################################
 
 # Food groups
-food_groups <- c("Fruits", "Vegetables", "Legumes, nuts, seeds", "Animal-source foods", "Starchy staples")
+food_groups <- c("Fruits", "Vegetables", "Legumes, nuts, seeds", "Animal-source foods", "Starchy staples", "Ultra-processed foods")
 
 # Scores
 score_names <- c("Overall", "Vitamin", "Mineral", "EAA", "Omega-3", "Fiber", 
@@ -110,7 +110,7 @@ ui <- fluidPage(titlePanel("Nutritional Value Score Explorer"),
     h4("Scores by food group"),
     
     # Plot boxplot
-    p("The figure below illustrates the distribution of Nutritional Value Scores and the seven sub-scores among foods within different recommended food groups in the Diet Quality Questionnaire. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
+    p("The figure below illustrates the distribution of Nutritional Value Scores and the seven sub-scores among foods within different recommended food groups in the Diet Quality Questionnaire and ultra-processed food groups. Food groups are sorted in order of descending mean scores. In boxplots, the solid line indicates the median, the box indicates the interquartile range (IQR; 25th to 75th percentiles), the whiskers indicate 1.5 times the IQR, and the points beyond the whiskers indicate outliers. The large central point indicates the mean value. Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
     
     # Select country
     # selectInput(inputId = "country1", label = "Select a country:",
@@ -139,8 +139,7 @@ ui <- fluidPage(titlePanel("Nutritional Value Score Explorer"),
     
     # Detailed results
     h4("Scores by individual foods"),
-    p("The figure below illustrates Nutritional Value Scores of unprocessed, minimally and moderately processed foods included in country-adapted Diet Quality Questionnaires (DQQ). Sub-scores 1-7 contribute to the overall Nutritional Value Score."),
-    p("The reason for selecting foods from Diet Quality Questionnaires is to ensure relevance to the local context, as DQQ foods are commonly consumed by a large proportion of households locally. In addition, we have chosen not to prioritize analyzing ultra-processed foods as these are usually not recommended in dietary guidelines globally, and the purpose of the NVS is to inform policy and programmatic decisions around nutritious foods to promote or invest in. However, future versions of the NVS may be expanded to allow for scoring ultra-processed foods and culinary ingredients."),
+    p("The figure below illustrates Nutritional Value Scores of common foods included in country-adapted Diet Quality Questionnaires (DQQ). Sub-scores 1-7 contribute to the overall Nutritional Value Score. The reason for selecting foods from Diet Quality Questionnaires is to ensure relevance to the local context, as DQQ foods are commonly consumed by a large proportion of households locally."),
     br(),
     
     # Select country
